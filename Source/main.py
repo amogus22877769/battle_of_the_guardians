@@ -13,7 +13,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
 # Загрузка изображения
-image = pygame.image.load('cat_image.jpg')
+image = pygame.image.load('Images/cat_image.jpg')
 image = pygame.transform.scale(image, (WIDTH, HEIGHT))  # Изменение размера изображения под экран
 
 # Шрифты
