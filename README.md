@@ -1,2 +1,2 @@
 School project made using pygame
-You can follow the homeworks - every commit is one homework task
+You can find the homeworks inside the "Homeworks" directory
