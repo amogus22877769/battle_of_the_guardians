@@ -13,27 +13,31 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
 # Загрузка изображения
-image = pygame.image.load('Images/cat_image.jpg')
-image = pygame.transform.scale(image, (WIDTH, HEIGHT))  # Изменение размера изображения под экран
-
+Menu = pygame.image.load('Images/DeckMap.jpeg')
+Menu = pygame.transform.scale(Menu, (WIDTH, HEIGHT))  # Изменение размера изображения под экран
+Battle = pygame.image.load('Images/MainGameTable.jpeg')
+Battle = pygame.transform.scale(Battle, (WIDTH, HEIGHT))
 # Шрифты
 font = pygame.font.Font(None, 74)
 start_text = font.render('Начать', True, BLACK)
 exit_text = font.render('Выйти', True, BLACK)
 
 # Кнопки
-start_button_rect = start_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 50))
-exit_button_rect = exit_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 50))
+BattleButton = pygame.image.load('Images/BattleButton.png')
+BattleButton = pygame.transform.scale(BattleButton, (WIDTH / 5, HEIGHT / 5))
 
 
 def draw_menu():
-    screen.fill(WHITE)
-    screen.blit(start_text, start_button_rect)
-    screen.blit(exit_text, exit_button_rect)
+    screen.blit(source=Menu, dest=(0, 0))
+    screen.blit(source=BattleButton, dest=pygame.rect(BattleButton).scale_by(5))
+
+
+def draw_battle():
+    screen.blit(Battle)
 
 
 def main():
-    menu = True
+    current_event = "Menu"
 
     while True:
         for event in pygame.event.get():
@@ -42,16 +46,11 @@ def main():
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Левый клик мыши
                 mouse_pos = event.pos
-                if start_button_rect.collidepoint(mouse_pos):
-                    menu = False
-                elif exit_button_rect.collidepoint(mouse_pos):
-                    pygame.quit()
-                    sys.exit()
 
-        if menu:
+        if current_event == "Menu":
             draw_menu()
-        else:
-            screen.blit(image, (0, 0))
+        elif current_event == "Battle":
+            draw_battle()
 
         pygame.display.update()
 
