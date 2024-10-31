@@ -1,61 +1,81 @@
 import pygame
 import sys
+import random
+from Source.classes import Background
 from config import *
-
+from classes import *
+from init import *
+import time
+import numpy
 # Инициализация Pygame
 pygame.init()
 
-# Размеры экрана
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
-# Цвета
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
+menu_sprites = pygame.sprite.Group(menu, battle_button)
 
-# Загрузка изображения
-menu = pygame.image.load('Images/DeckMap.jpeg')
-menu = pygame.transform.scale(menu, (WIDTH, HEIGHT))  # Изменение размера изображения под экран
-menu_rect = menu.get_rect(center=(WIDTH / 2, HEIGHT / 2))
-battle = pygame.image.load('Images/MainGameTable.jpeg')
-battle = pygame.transform.scale(battle, (WIDTH, HEIGHT))
-# Шрифты
-font = pygame.font.Font(None, 74)
-start_text = font.render('Начать', True, BLACK)
-exit_text = font.render('Выйти', True, BLACK)
+draft = []
 
-# Кнопки
-battle_button = pygame.image.load('Images/BattleButton.png')
-battle_button = pygame.transform.scale(battle_button, (WIDTH * BATTLE_BUTTON_SIZE, HEIGHT * BATTLE_BUTTON_SIZE))
-battle_button_rect = battle_button.get_rect()
+deck = pygame.sprite.Group()
 
+draft_stage = 0
 
-def draw_menu():
-    screen.blit(source=menu, dest=(0, 0))
-    screen.blit(source=battle_button,
-                dest=menu_rect.center)
-
-
-def draw_battle():
-    screen.blit(source=battle, dest=(0, 0))
-
+current_draft_tuple = pygame.sprite.Group()
 
 def main():
     current_event = "Menu"
-
+    flag = True
     while True:
+        click = False
+        mouse_pos = (0, 0)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Левый клик мыши
+            elif event.type == pygame.MOUSEBUTTONDOWN:  # Левый клик мыши
                 mouse_pos = event.pos
-                if battle_button_rect.collidepoint(mouse_pos):
-                    current_event = "Battle"
+                click = True
+        match current_event:
+            case "Menu":
+                menu_sprites.draw(screen)
+                if click:
+                    if battle_button.rect.collidepoint(mouse_pos):
+                        global draft, draft_stage, current_draft_tuple
+                        draft = raw_card_sprites.sprites()
+                        random.shuffle(draft)
+                        print(draft)
+                        draft_stage = 0
+                        current_event = "Draft"
+                        current_draft_tuple.empty()
+            case "Draft":
+                    if draft_stage <= 7:
+                        if flag:
+                            current_draft_tuple.add(draft[draft_stage], draft[draft_stage + 1])
+                            left_card = current_draft_tuple.sprites()[0]
+                            left_card.rect.update(LEFT_DRAFT_CARD_COORDINATES[0] - left_card.rect.width / 2, LEFT_DRAFT_CARD_COORDINATES[1] - left_card.rect.height / 2, left_card.rect.width, left_card.rect.height)
+                            right_card = current_draft_tuple.sprites()[1]
+                            right_card.rect.update(RIGHT_DRAFT_CARD_COORDINATES[0] - right_card.rect.width / 2, RIGHT_DRAFT_CARD_COORDINATES[1] - right_card.rect.height / 2, right_card.rect.width, right_card.rect.height)
+                            flag = False
+                        if click:
+                            if left_card.rect.collidepoint(mouse_pos):
+                                deck.add(left_card)
+                                draft_stage += 2
+                                current_draft_tuple.empty()
+                                flag = True
+                            elif right_card.rect.collidepoint(mouse_pos):
+                                deck.add(right_card)
+                                draft_stage += 2
+                                current_draft_tuple.empty()
+                                flag = True
+                    else:
+                        current_event = "Battle"
+                    draft_sprites.draw(screen)
+                    current_draft_tuple.draw(screen)
 
-        if current_event == "Menu":
-            draw_menu()
-        elif current_event == "Battle":
-            draw_battle()
+
+
+
+
+
 
         pygame.display.update()
 
