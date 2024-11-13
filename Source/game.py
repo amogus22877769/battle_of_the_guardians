@@ -12,21 +12,24 @@ class Game:
         pygame.init()
 
         self.clock = pygame.time.Clock()
-        self.stage = 0
-        self.stages = []
-        self.stages.append(Menu())
-        self.stages.append(Draft())
-
-    def handleEvents(self):
+        self.stage = "menu"
+        self.stages = {"menu": Menu(),
+                       "draft": Draft()}
+    def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                return event.pos
+            return 0
+
+
     def run(self):
         while True:
-            self.handleEvents()
+            pos = self.handle_events()
 
             self.stages[self.stage].draw()
-            self.stage = self.stages[self.stage].update(self.stage)
+            self.stage = self.stages[self.stage].update(pos)
             #self.clock.tick_busy_loop(FRAME_RATE)
             pygame.display.update()

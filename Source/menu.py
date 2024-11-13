@@ -25,17 +25,12 @@ class Menu:
         }
 
     # Метод для обработки обновлений, связанным с взаимодействием пользователя.
-    def handle_updates(self):
-        # Получаем список всех событий, произошедших с момента последнего обновления.
-        for event in pygame.event.get():
-            # Проверяем, было ли нажатие левой кнопки мыши.
-            if event.type == pygame.MOUSEBUTTONDOWN:  # Левый клик мыши
-                # Если курсор мыши находится на кнопке, определяем это с помощью столкновения (collidepoint).
-                if self.objects["buttons"].rect.collidepoint(event.pos):
-                    # Возвращаем значение 1, чтобы указать, что кнопка была нажата.
-                    return 1
-        # Если кнопка не была нажата, возвращаем 0.
-        return 0
+    def handle_updates(self, pos):
+        if pos:
+            if self.objects["buttons"].rect.collidepoint(pos):
+                # Возвращаем значение 1, чтобы указать, что кнопка была нажата.
+                return "draft"
+        return "menu"
 
     # Метод для отрисовки всех объектов меню на экране.
     def draw(self):
@@ -43,6 +38,6 @@ class Menu:
         pygame.sprite.Group(self.objects.values()).draw(screen)
 
     # Метод для обновления состояния меню, принимает параметр stage.
-    def update(self, stage):
+    def update(self, pos):
         # Обрабатываем обновления и возвращаем сумму с текущим значением stage.
-        return self.handle_updates() + stage
+        return self.handle_updates(pos)
