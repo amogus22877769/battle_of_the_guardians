@@ -28,4 +28,5 @@ class Battle:
         for card_index in range(len(self.objects["deck"])):
             self.objects["deck"][card_index].place(ALL_CARD_COORDINATES[card_index])
             self.objects["deck"][card_index].place_hp_bar(DISTANCE_BETWEEN_CARD_AND_HP_BAR)
+            self.objects["deck"][card_index].current_health = 2000
         return "battle"
