@@ -2,14 +2,15 @@ import numpy
 
 import pygame
 
-from Source.classes import Bar, Point
-from Source.config import CARD_SIZE
+from Source.classes import Bar, Point, String, Button
+from Source.config import CARD_SIZE, DARK_RED
 from Source.object import Object
 
 class Card:
 
-    def __init__(self, card_surface: pygame.Surface, outline_surface: pygame.Surface, outline_thickness: tuple[int], hp_bar: Bar, hitpoints: list[Point], health: float, damage: float) -> None:
+    def __init__(self, card_surface: pygame.Surface, outline_surface: pygame.Surface, outline_thickness: tuple[int], hp_bar: Bar, hp_icon: Button, hitpoints: list[Point], health: float, damage: float, font: pygame.font.Font) -> None:
         self.hp_bar: Bar = hp_bar
+        self.hp_icon: Button = hp_icon
         self._hitpoints: list[Point] = []
         for hitpoint in hitpoints:
             self._hitpoints.append(hitpoint)
@@ -17,7 +18,10 @@ class Card:
         self._current_health: float = self.health
         self.damage: float = damage
         self.count_of_visible_hitpoints: int = len(self._hitpoints)
-        # Call the parent class (Sprite) constructor
+        self.font: pygame.font.Font = font
+        self.health_sprite = String(self.font.render(f'{self._current_health}', None, DARK_RED), (
+            self.hp_bar.rect.left + self.hp_bar.rect.width / 2 - self.font.size(f'{self._current_health}')[0] / 2,
+            self.hp_bar.rect.top - self.font.size(f'{self._current_health}')[1]))
         card_surface = pygame.transform.scale(card_surface, (
             CARD_SIZE[0] - 2 * outline_thickness[0], CARD_SIZE[1] - 2 * outline_thickness[1]))
         card_surface_pixel_array = pygame.surfarray.array3d(card_surface)
@@ -45,7 +49,10 @@ class Card:
                                 self.sprite.rect.top - distance - self.hp_bar.rect.height,
                                 self.hp_bar.rect.width,
                                 self.hp_bar.rect.height)
-
+        self.hp_icon.rect.update(self.hp_bar.rect.left - self.hp_icon.rect.width,
+                                 self.hp_bar.rect.top + (self.hp_bar.rect.height - self.hp_icon.rect.height) / 2,
+                                 self.hp_icon.rect.width,
+                                 self.hp_icon.rect.height)
         for hitpoint_index in range(len(self.hitpoints)):
             self.hitpoints[hitpoint_index].rect.update(self.hp_bar.rect.left + self.hp_bar.thickness[0] + hitpoint_index * self.hitpoints[hitpoint_index].rect.width,
                                  self.hp_bar.rect.top + self.hp_bar.thickness[1],
@@ -58,6 +65,9 @@ class Card:
     def current_health(self, value: float) -> None:
         self._current_health = value
         self.count_of_visible_hitpoints = int(self._current_health / self.health * len(self._hitpoints))
+        self.health_sprite = String(self.font.render(f'{self._current_health}', None, DARK_RED), (
+        self.hp_bar.rect.left + self.hp_bar.rect.width / 2 - self.font.size(f'{self._current_health}')[0] / 2,
+        self.hp_bar.rect.top - self.font.size(f'{self._current_health}')[1]))
     @property
     def hitpoints(self) -> list[Point]:
         return self._hitpoints[:self.count_of_visible_hitpoints]

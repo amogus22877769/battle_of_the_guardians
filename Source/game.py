@@ -2,6 +2,10 @@ import sys
 
 from os import environ
 
+import numpy
+
+from Source.config import update_const, WIDTH, HEIGHT
+
 environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
 import pygame
@@ -9,7 +13,7 @@ import pygame
 from Source.action import Action
 from Source.battle import Battle
 from Source.draft import Draft
-from Source.init import stage
+from Source.init import stage, update_sprites, screen
 from Source.menu import Menu
 
 
@@ -33,7 +37,14 @@ class Game:
 
 
     def run(self) -> None:
+        old: tuple[int, int] = (0, 0)
         while True:
+            if screen.get_width() != old[0] or screen.get_height() != old[1]:
+                update_const(screen.get_width(), screen.get_height())
+                update_sprites()
+                print(f'new: {WIDTH, HEIGHT}')
+                old = (screen.get_width(), screen.get_height())
+                print(1)
             self.handle_events()
 
             self.stages[self.stage].draw()
