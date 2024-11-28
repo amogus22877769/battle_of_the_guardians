@@ -1,7 +1,7 @@
 from Source.classes import Background, Button, Bar, Point, String
 
 from Source.config import Config
-
+pass
 config = Config()
 
 import pygame
