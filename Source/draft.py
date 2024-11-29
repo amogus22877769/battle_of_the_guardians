@@ -5,17 +5,15 @@ from Source.buffer import buffer_deck
 from Source.card import Card
 from Source.classes import Background, Button
 # Импортируем константы для координат карточек на этапе драфта.
-from Source.config import LEFT_DRAFT_CARD_COORDINATES, RIGHT_DRAFT_CARD_COORDINATES
-
-# Импортируем объекты из модуля init - это фон, кнопки, и изображения для карточек.
-from Source.init import draft_map, screen, blazing_herald_raw, electro_wizard_raw, fire_dragon_raw, fire_wizard_raw, \
-    ground_titan_raw, ice_wizard_raw, mermaid_raw, stone_dwarf_raw, vs_button, stage, element
-
+from Source.config import Config
+from Source.draft_sprites import DraftSprites
+from Source.defines import stage, element
 import random  # Импортируем модуль random для перемешивания карточек.
 
 class Draft:  # Определяем класс Draft для управления процессом драфта.
     def __init__(self) -> None:  # Инициализируем состояние драфта.
         # Создаем словарь объектов, где храним фон, кнопки и карточки.
+        self.sprites = DraftSprites(Config())
         self.objects: dict[element: Background | dict[element: Button] | list[Card]] = {"background": draft_map,
                         "buttons": {"vs_button": vs_button},
                         "cards": [blazing_herald_raw, electro_wizard_raw, fire_dragon_raw, fire_wizard_raw,

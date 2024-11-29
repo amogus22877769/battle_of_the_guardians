@@ -3,10 +3,6 @@ from Source.action import Action
 from Source.buffer import buffer_deck
 from Source.card import Card
 from Source.classes import Background, Bar, String
-from Source.config import ALL_CARD_COORDINATES, DISTANCE_BETWEEN_CARD_AND_HP_BAR, WAVES_COUNTER_RIGHT_CORNER_POS, \
-    DARK_RED
-from Source.init import stage, element, battle, screen, shadow_monster_raw, \
-    fantasy_font_for_waves_counter
 
 
 class Battle:
