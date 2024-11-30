@@ -6,6 +6,7 @@ class EnergyBar:
         self.bar = bar
         self.icon = icon
         self.point = Point
+
     def place(self, center_coordinates) -> None:
         self.bar.rect.update(center_coordinates[0] - self.bar.rect.width / 2,
                              center_coordinates[1] - self.bar.rect.height,
@@ -15,4 +16,3 @@ class EnergyBar:
                               self.bar.rect.top + (self.bar.rect.height - self.icon.rect.height) / 2,
                               self.icon.rect.width,
                               self.icon.rect.height)
-

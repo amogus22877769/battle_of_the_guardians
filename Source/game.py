@@ -17,6 +17,7 @@ from Source.menu import Menu
 
 from Source.defines import stage
 
+
 class Game:
     def __init__(self) -> None:
         pygame.init()
@@ -27,10 +28,11 @@ class Game:
         self.clock: pygame.time.Clock = pygame.time.Clock()
         self.stage: stage = "menu"
         self.stages: dict[stage: Menu | Draft | Battle] = {"menu": Menu(),
-                       "draft": Draft(),
-                       "battle": Battle()}
+                                                           "draft": Draft(),
+                                                           "battle": Battle()}
         self.actions: list[Action] = []
         self.old_screen_size: tuple[int, int] = (self.config.WIDTH, self.config.HEIGHT)
+
     def handle_events(self) -> None:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -41,7 +43,6 @@ class Game:
         if self.screen.get_width() != self.old_screen_size[0] or self.screen.get_height() != self.old_screen_size[1]:
             self.actions.append(Action("resize", (self.screen.get_width(), self.screen.get_height())))
             self.old_screen_size = (self.screen.get_width(), self.screen.get_height())
-
 
     def run(self) -> None:
         while True:

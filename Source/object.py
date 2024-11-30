@@ -13,6 +13,7 @@ class Object(pygame.sprite.Sprite):
         # Fetch the rectangle object that has the dimensions of the image
         # Update the position of this object by setting the values of rect.x and rect.y
         self.rect = self.image.get_rect()
+
     def update(self, new_size: tuple[int, int]):
         self.image = pygame.transform.scale(self.real_image, new_size)
         self.rect = self.image.get_rect()
