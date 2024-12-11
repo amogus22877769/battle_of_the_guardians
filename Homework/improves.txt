@@ -1,0 +1,9 @@
+1) Rearrange __init__
+2) Type hints
+3) Function returning
+4) Rename variables to be more accurate and readable
+5) Rearrange project structure
+6) Set methods to public and private
+7) Make sure to sue kwargs whenever it is possible
+8) Do all the code style space thing
+9) Single '' instead of ""
