@@ -9,6 +9,7 @@ from Source.config import ALL_CARD_COORDINATES, RELATIVE_DISTANCE_BETWEEN_CARD_A
 from Source.defines import element, stage
 from Source.string import String
 
+
 class Battle:
     def __init__(self) -> None:
         self.sprites: BattleSprites = BattleSprites(buffer_deck)
@@ -19,6 +20,13 @@ class Battle:
             "waves_counter": self.sprites.waves_counter,
             "opps": [],
         }
+
+    def handle_events(self, actions: list[Action]) -> stage:
+        for action in actions:
+            match action.kind:
+                case 'resize':
+                    self.sprites.update(action.value)
+        return 'battle'
 
     def draw(self, screen) -> None:
         pygame.sprite.Group(self.objects["background"]).draw(screen)
@@ -31,4 +39,4 @@ class Battle:
             self.objects["deck"][card_index].place(ALL_CARD_COORDINATES[card_index])
             self.objects["deck"][card_index].place_hp_bar(RELATIVE_DISTANCE_BETWEEN_CARD_AND_HP_BAR)
             self.objects["deck"][card_index].current_health = 2000
-        return "battle"
+        return self.handle_events(actions)

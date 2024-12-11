@@ -25,5 +25,6 @@ class Menu:
 
     def draw(self, screen) -> pygame.sprite.Group:
         pygame.sprite.Group(self.objects["background"], self.objects["buttons"].values()).draw(screen)
+
     def update(self, actions: list[Action]) -> stage:
         return self.handle_updates(actions)

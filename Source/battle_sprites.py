@@ -12,8 +12,14 @@ from Source.string import String
 class BattleSprites:
     def __init__(self, deck: list[Card]) -> None:
         self.deck: list[Card] = deck
-        self.battle: Background = Background(pygame.image.load('Resources/Images/MainGameTable.jpeg'), (DEFAULT_WIDTH, DEFAULT_HEIGHT))
-        self.waves_counter: String = String(f'Wave: {0}', pygame.Color('black'), RELATIVE_WAVES_COUNTER_RIGHT_CORNER_POS, Path('Resources/Fonts/FantasyCapitals.otf'), RELATIVE_FANTASY_FONT_FOR_WAVES_COUNTER_SIZE, (DEFAULT_WIDTH, DEFAULT_HEIGHT))
+        self.battle: Background = Background(pygame.image.load('Resources/Images/MainGameTable.jpeg'),
+                                             (DEFAULT_WIDTH, DEFAULT_HEIGHT))
+        self.waves_counter: String = String(f'Wave: {0}', pygame.Color('black'),
+                                            RELATIVE_WAVES_COUNTER_RIGHT_CORNER_POS,
+                                            Path('Resources/Fonts/FantasyCapitals.otf'),
+                                            RELATIVE_FANTASY_FONT_FOR_WAVES_COUNTER_SIZE,
+                                            (DEFAULT_WIDTH, DEFAULT_HEIGHT))
+
     def update(self, new_window_size: tuple[int, int]) -> None:
         self.battle.update(new_window_size)
         self.waves_counter.update(new_window_size)
