@@ -1,7 +1,7 @@
 import sys
 
 from Source.battle import Battle
-from Source.config import DEFAULT_WIDTH, DEFAULT_HEIGHT, NAME_OF_THE_GAME
+from Source.config import DEFAULT_WIDTH, DEFAULT_HEIGHT, NAME_OF_THE_GAME, FRAME_RATE
 from Source.draft import Draft
 
 import pygame
@@ -45,8 +45,8 @@ class Game:
 
             old_stage: stage = self.stage
             self.stage = self.stages[self.stage].update(self.actions)
-            self.stages[self.stage].draw(self.screen)
-            #self.clock.tick_busy_loop(FRAME_RATE)
+            self.stages[old_stage].draw(self.screen)
+            self.clock.tick_busy_loop(FRAME_RATE)
             pygame.display.update()
             self.actions.clear()
             if self.stage is not old_stage:

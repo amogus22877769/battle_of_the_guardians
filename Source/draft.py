@@ -21,6 +21,7 @@ class Draft:
         random.shuffle(self.objects["cards"])
         self.stage_multiplied_by_two: int = 0
         self.deck: list[Card] = []
+        self.is_this_the_first_iteration_on_stage: bool = True
 
     def handle_events(self, actions: list[Action]) -> stage:
         for action in actions:
@@ -29,9 +30,11 @@ class Draft:
                     if self.objects["cards"][self.stage_multiplied_by_two].sprite.rect.collidepoint(action.value):
                         self.deck.append(self.objects["cards"][self.stage_multiplied_by_two])
                         self.stage_multiplied_by_two += 2
+                        self.is_this_the_first_iteration_on_stage = True
                     elif self.objects["cards"][self.stage_multiplied_by_two + 1].sprite.rect.collidepoint(action.value):
                         self.deck.append(self.objects["cards"][self.stage_multiplied_by_two + 1])
                         self.stage_multiplied_by_two += 2
+                        self.is_this_the_first_iteration_on_stage = True
                 case "resize":
                     self.sprites.update(*action.value)
         if self.stage_multiplied_by_two == 8:
@@ -49,11 +52,14 @@ class Draft:
                             self.objects["cards"][self.stage_multiplied_by_two + 1].to_draw_on_draft()).draw(screen)
 
     def update(self, actions: list[Action]) -> str:
-        self.objects["cards"][self.stage_multiplied_by_two].place(RELATIVE_LEFT_DRAFT_CARD_COORDINATES)
-        self.objects["cards"][self.stage_multiplied_by_two + 1].place(RELATIVE_RIGHT_DRAFT_CARD_COORDINATES)
+        if self.is_this_the_first_iteration_on_stage is True:
+            self.objects["cards"][self.stage_multiplied_by_two].place(RELATIVE_LEFT_DRAFT_CARD_COORDINATES)
+            self.objects["cards"][self.stage_multiplied_by_two + 1].place(RELATIVE_RIGHT_DRAFT_CARD_COORDINATES)
+        self.is_this_the_first_iteration_on_stage = False
         return self.handle_events(actions)
 
     def clear(self) -> None:
         random.shuffle(self.objects["cards"])
         self.stage_multiplied_by_two = 0
         self.deck.clear()
+        self.is_this_the_first_iteration_on_stage = True

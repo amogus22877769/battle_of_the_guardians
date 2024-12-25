@@ -5,38 +5,43 @@ from Source.bar import Bar
 from Source.battle_sprites import BattleSprites
 from Source.buffer import buffer_deck
 from Source.card import Card
-from Source.config import ALL_CARD_COORDINATES, RELATIVE_DISTANCE_BETWEEN_CARD_AND_HP_BAR
+from Source.config import ALL_CARD_COORDINATES, RELATIVE_DISTANCE_BETWEEN_CARD_AND_HP_BAR, ALL_EVEN_OPPS_COORDINATES
 from Source.defines import element, stage
+from Source.game_controller import GameController
 from Source.string import String
 
 
 class Battle:
     def __init__(self) -> None:
         self.sprites: BattleSprites = BattleSprites(buffer_deck)
-        self.waves_counter: int = 0
-        self.objects: dict[element: Background | list[Card] | list[Bar] | String] = {
-            "background": self.sprites.battle,
-            "deck": self.sprites.deck,
-            "waves_counter": self.sprites.waves_counter,
-            "opps": [],
-        }
+        self.game_controller: GameController = GameController(self.sprites.deck, self.sprites.opps, [self.sprites.shadow], self.sprites.waves_counter)
+        self.is_this_the_first_iteration: bool = True
 
     def handle_events(self, actions: list[Action]) -> stage:
+
         for action in actions:
             match action.kind:
                 case 'resize':
+                    pass
                     self.sprites.update(action.value)
+                case 'click':
+                    for card in self.sprites.deck:
+                        if card.outline.rect.collidepoint(action.value):
+                            self.game_controller.ready(card)
+                    for opp in self.sprites.opps:
+                        if opp.outline.rect.collidepoint(action.value):
+                            self.game_controller.attack(opp)
         return 'battle'
 
     def draw(self, screen) -> None:
-        pygame.sprite.Group(self.objects["background"]).draw(screen)
-        for card in self.objects["deck"]:
-            pygame.sprite.Group(card.to_draw_on_battle()).draw(screen)
-        pygame.sprite.Group(self.objects["waves_counter"]).draw(screen)
+        pygame.sprite.Group(self.sprites.battle).draw(screen)
+        [pygame.sprite.Group(card.to_draw_on_battle()).draw(screen) for card in self.sprites.deck]
+        [pygame.sprite.Group(card.to_draw_on_battle()).draw(screen) for card in self.sprites.opps]
+        pygame.sprite.Group(self.sprites.waves_counter).draw(screen)
+        pygame.sprite.Group(self.sprites.energy_bar.to_draw()).draw(screen)
 
     def update(self, actions: list[Action]) -> stage:
-        for card_index in range(len(self.objects["deck"])):
-            self.objects["deck"][card_index].place(ALL_CARD_COORDINATES[card_index])
-            self.objects["deck"][card_index].place_hp_bar(RELATIVE_DISTANCE_BETWEEN_CARD_AND_HP_BAR)
-            self.objects["deck"][card_index].current_health = 2000
+        if self.is_this_the_first_iteration:
+            self.game_controller.new_wave()
+        self.is_this_the_first_iteration = False
         return self.handle_events(actions)

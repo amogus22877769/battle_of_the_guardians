@@ -1,2 +1,3 @@
-stage = str
-element = str
+stage: type = str
+element: type = str
+flag: type = str
