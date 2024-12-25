@@ -5,6 +5,10 @@ from Source.defines import flag
 from Source.string import String
 
 
+def how_many_need_to_spawn(wave: int) -> int:
+    return wave ** 2
+
+
 class GameController:
     def __init__(self, deck: list[Card], opps: list[Card], opp: list[Card], waves_counter: String) -> None:
         self.deck: list[Card] = deck
@@ -30,7 +34,9 @@ class GameController:
                     case 3:
                         opp.place(ALL_ODD_OPPS_COORDINATES[opp_index])
                     case _:
-                        opp.place(ALL_EVEN_OPPS_COORDINATES[opp_index]) if opp_index < len(ALL_EVEN_OPPS_COORDINATES) else opp.place((-opp.outline.relative_size[0] / 2, -opp.outline.relative_size[1] / 2))
+                        opp.place(ALL_EVEN_OPPS_COORDINATES[opp_index]) if opp_index < len(
+                            ALL_EVEN_OPPS_COORDINATES) else opp.place(
+                            (-opp.outline.relative_size[0] / 2, -opp.outline.relative_size[1] / 2))
                 opp.place_hp_bar(RELATIVE_DISTANCE_BETWEEN_CARD_AND_HP_BAR)
         else:
             self.opps[len(ALL_EVEN_OPPS_COORDINATES) - 1].place(free_coordinates)
@@ -39,25 +45,29 @@ class GameController:
     def new_wave(self) -> None:
         self.integer_waves_counter += 1
         self.waves_counter.text = self.waves_counter.text[:6] + f'{self.integer_waves_counter}'
-        [self.opps.append(self.opp[0].copy()) for _ in range(self.how_many_need_to_spawn(self.integer_waves_counter))]
+        [self.opps.append(self.opp[0].copy()) for _ in range(how_many_need_to_spawn(self.integer_waves_counter))]
         self.place_cards()
         self.place_opps()
 
     def ready(self, card: Card) -> None:
         if not self.flags['ready']:
-            card.sprite.resize((card.sprite.relative_size[0] * CARD_SIZE_MULTIPLIER, card.sprite.relative_size[1] * CARD_SIZE_MULTIPLIER))
-            card.outline.resize((card.outline.relative_size[0] * CARD_SIZE_MULTIPLIER, card.outline.relative_size[1] * CARD_SIZE_MULTIPLIER))
+            card.sprite.resize((card.sprite.relative_size[0] * CARD_SIZE_MULTIPLIER,
+                                card.sprite.relative_size[1] * CARD_SIZE_MULTIPLIER))
+            card.outline.resize((card.outline.relative_size[0] * CARD_SIZE_MULTIPLIER,
+                                 card.outline.relative_size[1] * CARD_SIZE_MULTIPLIER))
             self.flags['ready'].add(card)
         elif card in self.flags['ready']:
-            card.sprite.resize((card.sprite.relative_size[0] / CARD_SIZE_MULTIPLIER, card.sprite.relative_size[1] / CARD_SIZE_MULTIPLIER))
-            card.outline.resize((card.outline.relative_size[0] / CARD_SIZE_MULTIPLIER, card.outline.relative_size[1] / CARD_SIZE_MULTIPLIER))
+            card.sprite.resize((card.sprite.relative_size[0] / CARD_SIZE_MULTIPLIER,
+                                card.sprite.relative_size[1] / CARD_SIZE_MULTIPLIER))
+            card.outline.resize((card.outline.relative_size[0] / CARD_SIZE_MULTIPLIER,
+                                 card.outline.relative_size[1] / CARD_SIZE_MULTIPLIER))
             self.flags['ready'].remove(card)
         else:
             past_card = self.flags['ready'].pop()
             past_card.sprite.resize((past_card.sprite.relative_size[0] / CARD_SIZE_MULTIPLIER,
-                                past_card.sprite.relative_size[1] / CARD_SIZE_MULTIPLIER))
+                                     past_card.sprite.relative_size[1] / CARD_SIZE_MULTIPLIER))
             past_card.outline.resize((past_card.outline.relative_size[0] / CARD_SIZE_MULTIPLIER,
-                                 past_card.outline.relative_size[1] / CARD_SIZE_MULTIPLIER))
+                                      past_card.outline.relative_size[1] / CARD_SIZE_MULTIPLIER))
             self.ready(card)
 
     def attack(self, opp: Card) -> None:
@@ -74,10 +84,3 @@ class GameController:
                     self.new_wave()
                 else:
                     self.place_opps(free_coordinates=opp.outline.relative_center_coordinates)
-
-    def how_many_need_to_spawn(self, wave: int) -> int:
-        return wave ** 2
-
-
-
-

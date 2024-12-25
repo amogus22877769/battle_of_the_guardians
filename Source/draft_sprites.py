@@ -21,21 +21,23 @@ from Source.point import Point
 class DraftSprites:
     def __init__(self) -> None:
         empty_card: Object = Object(pygame.Surface((0, 0)),
-                             (RELATIVE_CARD_SIZE[0] - RELATIVE_BASIC_OUTLINE_THICKNESS[0] * 2,
-                              RELATIVE_CARD_SIZE[1] - RELATIVE_BASIC_OUTLINE_THICKNESS[1] * 2),
-                             (DEFAULT_WIDTH, DEFAULT_HEIGHT))
-        default_outline: Object = Object(pygame.image.load('Resources/Images/CardOrnament.png'), RELATIVE_CARD_SIZE, (DEFAULT_WIDTH, DEFAULT_HEIGHT))
+                                    (RELATIVE_CARD_SIZE[0] - RELATIVE_BASIC_OUTLINE_THICKNESS[0] * 2,
+                                     RELATIVE_CARD_SIZE[1] - RELATIVE_BASIC_OUTLINE_THICKNESS[1] * 2),
+                                    (DEFAULT_WIDTH, DEFAULT_HEIGHT))
+        default_outline: Object = Object(pygame.image.load('Resources/Images/CardOrnament.png'), RELATIVE_CARD_SIZE,
+                                         (DEFAULT_WIDTH, DEFAULT_HEIGHT))
         default_hp_bar: Bar = Bar(pygame.image.load('Resources/Images/HitpointBar.png'), RELATIVE_DEFAULT_HP_BAR_SIZE,
-                     RELATIVE_DEFAULT_HP_BAR_THICKNESS, (DEFAULT_WIDTH, DEFAULT_HEIGHT))
+                                  RELATIVE_DEFAULT_HP_BAR_THICKNESS, (DEFAULT_WIDTH, DEFAULT_HEIGHT))
         default_hp_icon: Button = Button(pygame.image.load('Resources/Images/HitpointsIcon.png'), (0, 0), (
-                     RELATIVE_DEFAULT_HP_BAR_SIZE[1] * RELATIVE_HITPOINTS_ICON_SIZE,
-                     RELATIVE_DEFAULT_HP_BAR_SIZE[1] * RELATIVE_HITPOINTS_ICON_SIZE), (DEFAULT_WIDTH, DEFAULT_HEIGHT))
-        default_hitpoint: Point = Point(pygame.image.load('Resources/Images/Hitpoint.png'), RELATIVE_DEFAULT_HP_BAR_SIZE, RELATIVE_DEFAULT_HP_BAR_THICKNESS,
-                      (DEFAULT_WIDTH, DEFAULT_HEIGHT))
+            RELATIVE_DEFAULT_HP_BAR_SIZE[1] * RELATIVE_HITPOINTS_ICON_SIZE,
+            RELATIVE_DEFAULT_HP_BAR_SIZE[1] * RELATIVE_HITPOINTS_ICON_SIZE), (DEFAULT_WIDTH, DEFAULT_HEIGHT))
+        default_hitpoint: Point = Point(pygame.image.load('Resources/Images/Hitpoint.png'),
+                                        RELATIVE_DEFAULT_HP_BAR_SIZE, RELATIVE_DEFAULT_HP_BAR_THICKNESS,
+                                        (DEFAULT_WIDTH, DEFAULT_HEIGHT))
         empty_string: String = String(f'', pygame.Color('red'), (0, 0),
-                        Path('Resources/Fonts/FantasyCapitals.otf'),
-                        RELATIVE_FANTASY_FONT_FOR_CARD_HEALTH_SIZE_USING_THE_DEFAULT_HP_BAR,
-                        (DEFAULT_WIDTH, DEFAULT_HEIGHT))
+                                      Path('Resources/Fonts/FantasyCapitals.otf'),
+                                      RELATIVE_FANTASY_FONT_FOR_CARD_HEALTH_SIZE_USING_THE_DEFAULT_HP_BAR,
+                                      (DEFAULT_WIDTH, DEFAULT_HEIGHT))
         self.deck: list[Card] = [
             Card(empty_card.copy_consts(pygame.image.load('Resources/Images/BlazingHerald.jpeg')),
                  default_outline.copy(),
