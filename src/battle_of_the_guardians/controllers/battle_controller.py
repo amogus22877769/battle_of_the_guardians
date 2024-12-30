@@ -9,7 +9,7 @@ def how_many_need_to_spawn(wave: int) -> int:
     return wave ** 2
 
 
-class GameController:
+class BattleController:
     def __init__(self, deck: list[Card], opps: list[Card], opp: list[Card], waves_counter: String) -> None:
         self.deck: list[Card] = deck
         self.opps: list[Card] = opps

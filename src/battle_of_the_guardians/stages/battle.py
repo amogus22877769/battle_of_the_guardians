@@ -2,7 +2,7 @@ from pygame.sprite import Group
 
 from src.battle_of_the_guardians.action import Action
 from src.battle_of_the_guardians.buffer import buffer_deck
-from src.battle_of_the_guardians.controllers.game_controller import GameController
+from src.battle_of_the_guardians.controllers.battle_controller import BattleController
 from src.battle_of_the_guardians.defines import stage
 from src.battle_of_the_guardians.sprites_loaders.battle_sprites import BattleSprites
 
@@ -10,7 +10,7 @@ from src.battle_of_the_guardians.sprites_loaders.battle_sprites import BattleSpr
 class Battle:
     def __init__(self) -> None:
         self.sprites: BattleSprites = BattleSprites(buffer_deck)
-        self.game_controller: GameController = GameController(self.sprites.deck, self.sprites.opps, [self.sprites.shadow], self.sprites.waves_counter)
+        self.game_controller: BattleController = BattleController(self.sprites.deck, self.sprites.opps, [self.sprites.shadow], self.sprites.waves_counter)
         self.is_this_the_first_iteration: bool = True
 
     def handle_events(self, actions: list[Action]) -> stage:

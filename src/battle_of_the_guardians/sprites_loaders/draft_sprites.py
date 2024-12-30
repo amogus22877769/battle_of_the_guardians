@@ -37,7 +37,7 @@ class DraftSprites:
                                       Path('resources/fonts/fantasy_capitals.otf'),
                                       RELATIVE_FANTASY_FONT_FOR_CARD_HEALTH_SIZE_USING_THE_DEFAULT_HP_BAR,
                                       (DEFAULT_WIDTH, DEFAULT_HEIGHT))
-        self.deck: list[Card] = [
+        self.cards: list[Card] = [
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/blazing_herald.jpeg')),
                  default_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -128,6 +128,6 @@ class DraftSprites:
                                                 (DEFAULT_WIDTH, DEFAULT_HEIGHT))
 
     def update(self, new_width: int, new_height: int) -> None:
-        [card.update((new_width, new_height)) for card in self.deck]
+        [card.update((new_width, new_height)) for card in self.cards]
         self.draft_map.update((new_width, new_height))
         self.vs_button.update((new_width, new_height))

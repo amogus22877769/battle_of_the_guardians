@@ -13,7 +13,8 @@ class MenuSprites:
         self.battle_button: Button = Button(pygame.image.load('resources/img/buttons/battle_button.png'),
                                             RELATIVE_BATTLE_BUTTON_COORDINATES,
                                             RELATIVE_BATTLE_BUTTON_SIZE,
-                                            (DEFAULT_WIDTH, DEFAULT_HEIGHT))
+                                            (DEFAULT_WIDTH, DEFAULT_HEIGHT),
+                                            circular=True)
 
     def update(self, new_width: int, new_height: int) -> None:
         self.menu.update((new_width, new_height))

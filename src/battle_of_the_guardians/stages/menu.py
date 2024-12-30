@@ -13,7 +13,7 @@ class Menu:
         for action in actions:
             match action.kind:
                 case "click":
-                    if self.sprites.battle_button.rect.collidepoint(action.value):
+                    if self.sprites.battle_button.collide_point(*action.value):
                         return "draft"
                 case "resize":
                     self.sprites.update(*action.value)
