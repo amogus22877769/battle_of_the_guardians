@@ -14,8 +14,8 @@ class String(pygame.sprite.Sprite):
         self.font = pygame.font.Font(font_path, size=int(self.relative_size * window_size[1]))
         self.relative_center_coordinates: tuple[float, float] = relative_center_coordinates
         self.window_size: tuple[int, int] = window_size
-        self.image = self.font.render(self._text, None, self.color)
-        self.rect = self.image.get_rect()
+        self.image: pygame.Surface = self.font.render(self._text, None, self.color)
+        self.rect: pygame.Rect = self.image.get_rect()
         self.rect.update(self.relative_center_coordinates[0] * self.window_size[0] - self.rect.width / 2,
                          self.relative_center_coordinates[1] * self.window_size[1] - self.rect.height / 2,
                          self.rect.width,

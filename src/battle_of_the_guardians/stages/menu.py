@@ -20,7 +20,8 @@ class Menu:
         return "menu"
 
     def draw(self, screen) -> None:
-        Group(self.sprites.menu, self.sprites.battle_button).draw(screen)
+        screen.blits(blit_sequence=((self.sprites.menu.image, self.sprites.menu.rect),
+                                    (self.sprites.battle_button.image, self.sprites.battle_button.rect)))
 
     def update(self, actions: list[Action]) -> stage:
         return self.handle_updates(actions)

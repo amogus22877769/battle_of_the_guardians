@@ -3,14 +3,16 @@ import pygame
 
 class Button(pygame.sprite.Sprite):
 
-    def __init__(self, surface: pygame.Surface, relative_center_coordinates: tuple[float, float], relative_size: tuple[float, float], window_size: tuple[int, int], circular: bool = False) -> None:
+    def __init__(self, surface: pygame.Surface, relative_center_coordinates: tuple[float, float],
+                 relative_size: tuple[float, float], window_size: tuple[int, int], circular: bool = False) -> None:
         pygame.sprite.Sprite.__init__(self)
-        self.real_image = surface
+        self.real_image: pygame.Surface = surface
         self.relative_center_coordinates: tuple[float, float] = relative_center_coordinates
         self.relative_size: tuple[float, float] = relative_size
         self.window_size: tuple[int, int] = window_size
-        self.image = pygame.transform.scale(self.real_image, (self.window_size[0] * self.relative_size[0], self.window_size[1] * self.relative_size[1]))
-        self.rect = self.image.get_rect()
+        self.image: pygame.Surface = pygame.transform.scale(self.real_image, (
+            self.window_size[0] * self.relative_size[0], self.window_size[1] * self.relative_size[1]))
+        self.rect: pygame.Rect = self.image.get_rect()
         self.rect.update(self.relative_center_coordinates[0] * window_size[0] - self.rect.width / 2,
                          self.relative_center_coordinates[1] * window_size[1] - self.rect.height / 2,
                          self.rect.width,
@@ -24,7 +26,8 @@ class Button(pygame.sprite.Sprite):
 
     def update(self, new_window_size: tuple[int, int]) -> None:
         self.window_size = new_window_size
-        self.image = pygame.transform.scale(self.real_image, (self.window_size[0] * self.relative_size[0], self.window_size[1] * self.relative_size[1]))
+        self.image = pygame.transform.scale(self.real_image, (
+            self.window_size[0] * self.relative_size[0], self.window_size[1] * self.relative_size[1]))
         self.rect = self.image.get_rect()
         self.rect.update(self.relative_center_coordinates[0] * self.window_size[0] - self.rect.width / 2,
                          self.relative_center_coordinates[1] * self.window_size[1] - self.rect.height / 2,
@@ -37,7 +40,8 @@ class Button(pygame.sprite.Sprite):
             self.b = self.window_size[1] * self.relative_size[1] / 2
 
     def copy(self):
-        return Button(self.real_image, self.relative_center_coordinates, self.relative_size, self.window_size, circular=self.circular)
+        return Button(self.real_image, self.relative_center_coordinates, self.relative_size, self.window_size,
+                      circular=self.circular)
 
     def place(self, relative_center_coordinates: tuple[float, float]):
         self.relative_center_coordinates = relative_center_coordinates
@@ -48,7 +52,6 @@ class Button(pygame.sprite.Sprite):
         if self.circular:
             self.h = self.window_size[0] * self.relative_center_coordinates[0]
             self.k = self.window_size[1] * self.relative_center_coordinates[1]
-
 
     def collide_point(self, x: int, y: int) -> bool:
         if self.circular:

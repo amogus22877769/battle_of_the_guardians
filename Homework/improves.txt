@@ -8,3 +8,4 @@
 8) Do all the code style space thing
 9) Single '' instead of ""
 10) If the line is too long, do better enters
+11) Set args to private whenever its possible

@@ -5,11 +5,11 @@ class Object(pygame.sprite.Sprite):
 
     def __init__(self, surface, relative_size: tuple[float, float], window_size: tuple[int, int], relative_center_coordinates: tuple[float, float] = (0, 0)):
         pygame.sprite.Sprite.__init__(self)
-        self.real_image = surface
+        self.real_image: pygame.Surface = surface
         self.relative_size: tuple[float, float] = relative_size
         self.window_size: tuple[int, int] = window_size
-        self.image = pygame.transform.scale(self.real_image, (self.window_size[0] * self.relative_size[0], self.window_size[1] * self.relative_size[1]))
-        self.rect = self.image.get_rect()
+        self.image: pygame.Surface = pygame.transform.scale(self.real_image, (self.window_size[0] * self.relative_size[0], self.window_size[1] * self.relative_size[1]))
+        self.rect: pygame.Rect = self.image.get_rect()
         self.relative_center_coordinates: tuple[float, float] = relative_center_coordinates
         self.rect.update(self.relative_center_coordinates[0] * self.window_size[0] - self.rect.width / 2,
                          self.relative_center_coordinates[1] * self.window_size[1] - self.rect.height / 2,

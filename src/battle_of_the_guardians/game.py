@@ -2,6 +2,7 @@ import sys
 
 import pygame
 
+from src.battle_of_the_guardians import animations
 from src.battle_of_the_guardians.action import Action
 from src.battle_of_the_guardians.config import DEFAULT_WIDTH, DEFAULT_HEIGHT, NAME_OF_THE_GAME, FRAME_RATE
 from src.battle_of_the_guardians.defines import stage
@@ -40,7 +41,7 @@ class Game:
     def run(self) -> None:
         while True:
             self.handle_events()
-
+            animations.update_animations()
             old_stage: stage = self.stage
             self.stage = self.stages[self.stage].update(self.actions)
             self.stages[old_stage].draw(self.screen)

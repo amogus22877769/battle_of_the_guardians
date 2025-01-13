@@ -1,3 +1,5 @@
+import pygame
+
 from src.battle_of_the_guardians.sprites.bar import Bar
 from src.battle_of_the_guardians.sprites.button import Button
 from src.battle_of_the_guardians.sprites.point import Point
@@ -26,8 +28,12 @@ class EnergyBar:
         [point.update(self.window_size) for point in self.points]
         self.place()
 
-    def to_draw(self):
-        return [self.bar, self.icon, self.points[:self.count_of_visible_points]]
+    def to_draw(self) -> list[tuple[pygame.Surface, pygame.Rect]]:
+
+        # return [self.bar, self.icon, self.points[:self.count_of_visible_points]]
+
+        return [(self.bar.image, self.bar.rect), (self.icon.image, self.icon.rect),
+                *[(point.image, point.rect) for point in self.points[:self.count_of_visible_points]]]
 
     def place(self):
         self.bar.place(self.relative_coordinates)
