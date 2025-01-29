@@ -14,7 +14,8 @@ class Battle:
         self.game_controller: BattleController = BattleController(self.sprites.deck,
                                                                   self.sprites.opponents,
                                                                   self.sprites.opposition,
-                                                                  self.sprites.waves_counter)
+                                                                  self.sprites.waves_counter,
+                                                                  self.sprites.energy_bar)
         self.is_this_the_first_iteration: bool = True
 
     def handle_events(self, actions: list[Action]) -> stage:

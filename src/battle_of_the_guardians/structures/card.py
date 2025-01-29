@@ -23,6 +23,7 @@ class Card:
                  damage: float,
                  hp_string: String,
                  shield_string: String,
+                 ability,
                  shield: int = 0) -> None:
         self.sprite = card
         self.outline = outline
@@ -56,6 +57,8 @@ class Card:
         self._current_shield = self.shield
         self.shield_string.text = f'{self._current_shield}'
 
+        self.ability = ability
+
     def place(self, relative_center_coordinates: tuple[float, float]) -> None:
         self.sprite.place(relative_center_coordinates)
         self.outline.place(relative_center_coordinates)
@@ -76,7 +79,7 @@ class Card:
         self.shield_bar.place((self.hp_string.relative_center_coordinates[0],
                                self.hp_string.relative_center_coordinates[1] - self.hp_string.relative_size / 2
                                - self.shield_bar.relative_size[1] / 2))
-        self.hp_icon.place((self.shield_bar.relative_center_coordinates[0] - self.shield_bar.relative_size[0] / 2 -
+        self.shield_icon.place((self.shield_bar.relative_center_coordinates[0] - self.shield_bar.relative_size[0] / 2 -
                             self.shield_icon.relative_size[0] / 2,
                             self.shield_bar.relative_center_coordinates[1]))
         self.place_shield_points()
@@ -120,9 +123,11 @@ class Card:
     @current_health.setter
     def current_health(self, value: float) -> None:
         self._current_health = value
+        if self._current_health > self.health:
+            self._current_health = self.health
         self.count_of_visible_health_points = int(self._current_health /
                                                   self.health * self.max_count_of_visible_health_points)
-        self.hp_string.text = f'{self._current_shield}'
+        self.hp_string.text = f'{self._current_health}'
 
     @property
     def current_shield(self):
@@ -142,6 +147,10 @@ class Card:
     @shield.setter
     def shield(self, value):
         self._shield = value
+        self._current_shield = self._shield
+        self.count_of_visible_shield_points = int(self._current_shield / self.shield *
+                                                  self.max_count_of_visible_shield_points) if self._shield else 0
+        self.shield_string.text = f'{self._current_shield}'
 
     def to_draw_on_draft(self) -> list[tuple[pygame.Surface, pygame.Rect]]:
 
@@ -157,8 +166,11 @@ class Card:
         return [(self.sprite.image, self.sprite.rect), (self.outline.image, self.outline.rect),
                 (self.hp_bar.image, self.hp_bar.rect), (self.hp_icon.image, self.hp_icon.rect),
                 (self.hp_string.image, self.hp_string.rect),
-                *[(self.shield_string.image, self.shield_string.rect) for _ in [0]
-                if self._shield and self._current_shield],
+                *[(self.shield_string.image, self.shield_string.rect) for _ in [0] if self._shield and self._current_shield],
+                *[(self.shield_bar.image, self.shield_bar.rect) for _ in [0] if
+                  self._shield and self._current_shield],
+                *[(self.shield_icon.image, self.shield_icon.rect) for _ in [0] if
+                  self._shield and self._current_shield],
                 *[(health_point.image, health_point.rect) for
                   health_point in
                   self.health_points[:self.count_of_visible_health_points]],
@@ -175,6 +187,10 @@ class Card:
         self.hp_bar.update(new_window_size)
         self.update_health_points(new_window_size)
         self.hp_icon.update(new_window_size)
+        self.shield_string.update(new_window_size)
+        self.shield_bar.update(new_window_size)
+        self.shield_icon.update(new_window_size)
+        self.update_shield_points(new_window_size)
 
     def update_health_points(self, new_window_size: tuple[int, int]) -> None:
         new_max_count_of_visible_health_points: int = int(
@@ -191,8 +207,23 @@ class Card:
                                                   self.health * self.max_count_of_visible_health_points)
         self.place_health_points()
 
+    def update_shield_points(self, new_window_size: tuple[int, int]) -> None:
+        new_max_count_of_visible_shield_points: int = int(
+            (self.shield_bar.relative_size[0] - self.shield_bar.relative_thickness[0] * 2) * self.window_size[0] / (
+                    self.shield_bar.relative_size[1] - self.shield_bar.relative_thickness[1] * 2) / self.window_size[1])
+        if new_max_count_of_visible_shield_points >= self.max_count_of_visible_shield_points:
+            [shield_point.update(new_window_size) for shield_point in self.shield_points]
+            [self.shield_points.append(self.shield_points[0].copy())
+             for _ in range(new_max_count_of_visible_shield_points - self.max_count_of_visible_shield_points)]
+        else:
+            [self.shield_points[i].update(new_window_size) for i in range(new_max_count_of_visible_shield_points)]
+        self.max_count_of_visible_shield_points = new_max_count_of_visible_shield_points
+        self.count_of_visible_shield_points = int(self._current_shield /
+                                                  self._shield * self.max_count_of_visible_shield_points) if self._shield else self.count_of_visible_shield_points
+        self.place_shield_points()
+
     def copy(self):
         return Card(self.sprite.copy(), self.outline.copy(), self.relative_outline_thickness,
                     self.window_size, self.hp_bar.copy(), self.hp_icon.copy(), self.health_points[0].copy(),
                     self.shield_bar.copy(), self.shield_icon.copy(), self.shield_points[0].copy(),
-                    self.health, self.damage, self.hp_string.copy(), self.shield_string.copy(), shield=self._shield)
+                    self.health, self.damage, self.hp_string.copy(), self.shield_string.copy(), self.ability, shield=self._shield)

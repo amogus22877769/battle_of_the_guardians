@@ -2,12 +2,16 @@ from pathlib import Path
 
 import pygame
 
+from src.battle_of_the_guardians.ability import Ability
 from src.battle_of_the_guardians.config import RELATIVE_CARD_SIZE, RELATIVE_BASIC_OUTLINE_THICKNESS, DEFAULT_WIDTH, \
     DEFAULT_HEIGHT, RELATIVE_DEFAULT_HP_BAR_SIZE, RELATIVE_DEFAULT_HP_BAR_THICKNESS, RELATIVE_HEALTH_POINTS_ICON_SIZE, \
     RELATIVE_FANTASY_FONT_FOR_CARD_HEALTH_SIZE_USING_THE_DEFAULT_HP_BAR, BLAZING_HERALD_HP, BLAZING_HERALD_DMG, \
     ELECTRO_WIZARD_HP, ELECTRO_WIZARD_DMG, FIRE_DRAGON_HP, FIRE_DRAGON_DMG, FIRE_WIZARD_HP, FIRE_WIZARD_DMG, \
     GROUND_TITAN_HP, GROUND_TITAN_DMG, ICE_WIZARD_HP, ICE_WIZARD_DMG, MERMAID_HP, MERMAID_DMG, STONE_DWARF_HP, \
-    STONE_DWARF_DMG, RELATIVE_VS_BUTTON_COORDINATES, RELATIVE_VS_BUTTON_SIZE
+    STONE_DWARF_DMG, RELATIVE_VS_BUTTON_COORDINATES, RELATIVE_VS_BUTTON_SIZE, FIRE_WAVE_DMG, FIRE_WAVE_COST, \
+    FIRE_BREATHE_DMG, FIRE_BREATHE_COST, THUNDER_PUNCH_DMG, THUNDER_PUNCH_COST, GROUND_PROTECTION_AMOUNT, \
+    GROUND_PROTECTION_COST, ICE_WALL_TIME, ICE_WALL_COST, HEAL_AMOUNT, HEAL_COST, STRONG_AMOUNT, STRONG_COST, \
+    ACCELERATION_COST
 from src.battle_of_the_guardians.sprites.background import Background
 from src.battle_of_the_guardians.sprites.bar import Bar
 from src.battle_of_the_guardians.sprites.button import Button
@@ -60,6 +64,7 @@ class DraftSprites:
                  BLAZING_HERALD_DMG,
                  empty_string.copy(),
                  empty_string.copy(),
+                 Ability('acceleration', 0, ACCELERATION_COST),
                  shield=1000),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/electro_wizard.jpeg')),
                  default_outline.copy(),
@@ -74,7 +79,8 @@ class DraftSprites:
                  ELECTRO_WIZARD_HP,
                  ELECTRO_WIZARD_DMG,
                  empty_string.copy(),
-                 empty_string.copy()),
+                 empty_string.copy(),
+                 Ability('thunder_punch', THUNDER_PUNCH_DMG, THUNDER_PUNCH_COST)),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/fire_dragon.jpeg')),
                  default_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -88,7 +94,8 @@ class DraftSprites:
                  FIRE_DRAGON_HP,
                  FIRE_DRAGON_DMG,
                  empty_string.copy(),
-                 empty_string.copy()),
+                 empty_string.copy(),
+                 Ability('fire_breathe', FIRE_BREATHE_DMG, FIRE_BREATHE_COST)),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/fire_wizard.jpeg')),
                  default_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -102,7 +109,8 @@ class DraftSprites:
                  FIRE_WIZARD_HP,
                  FIRE_WIZARD_DMG,
                  empty_string.copy(),
-                 empty_string.copy()),
+                 empty_string.copy(),
+                 Ability('fire_wave', FIRE_WAVE_DMG, FIRE_WAVE_COST)),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/ground_titan.jpeg')),
                  default_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -116,7 +124,8 @@ class DraftSprites:
                  GROUND_TITAN_HP,
                  GROUND_TITAN_DMG,
                  empty_string.copy(),
-                 empty_string.copy()),
+                 empty_string.copy(),
+                 Ability('ground_protection', GROUND_PROTECTION_AMOUNT, GROUND_PROTECTION_COST)),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/ice_wizard.jpeg')),
                  default_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -130,7 +139,8 @@ class DraftSprites:
                  ICE_WIZARD_HP,
                  ICE_WIZARD_DMG,
                  empty_string.copy(),
-                 empty_string.copy()),
+                 empty_string.copy(),
+                 Ability('ice_wall', ICE_WALL_TIME, ICE_WALL_COST)),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/mermaid.jpeg')),
                  default_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -144,7 +154,8 @@ class DraftSprites:
                  MERMAID_HP,
                  MERMAID_DMG,
                  empty_string.copy(),
-                 empty_string.copy()),
+                 empty_string.copy(),
+                 Ability('heal', HEAL_AMOUNT, HEAL_COST)),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/stone_dwarf.jpeg')),
                  default_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -158,7 +169,8 @@ class DraftSprites:
                  STONE_DWARF_HP,
                  STONE_DWARF_DMG,
                  empty_string.copy(),
-                 empty_string.copy())
+                 empty_string.copy(),
+                 Ability('strong', STRONG_AMOUNT, STRONG_COST))
         ]
 
         self.vs_button: Button = Button(pygame.image.load('resources/img/buttons/vs_button.png'),

@@ -38,7 +38,6 @@ class Animation:
 
     def update(self) -> None:
         delta_ticks: int = pygame.time.get_ticks() - self._start_ticks
-        print(f'dt = {delta_ticks}, duration = {self.duration}')
         if delta_ticks / self.duration >= 1:
             self._stop()
         [self.targets[i].place((self._starting_relative_center_coordinates[i][0] +

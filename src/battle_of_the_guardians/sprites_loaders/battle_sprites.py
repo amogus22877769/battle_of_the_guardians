@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pygame
 
+from src.battle_of_the_guardians.ability import Ability
 from src.battle_of_the_guardians.config import DEFAULT_WIDTH, DEFAULT_HEIGHT, \
     RELATIVE_WAVES_COUNTER_RELATIVE_CENTER_COORDINATES, RELATIVE_FANTASY_FONT_FOR_WAVES_COUNTER_SIZE, \
     RELATIVE_DEFAULT_ENERGY_BAR_SIZE, RELATIVE_ENERGY_ICON_SIZE, DEFAULT_ENERGY_BAR_ALPHA, TOTAL_ENERGY, \
@@ -64,7 +65,8 @@ class BattleSprites:
                  TERRIBLE_USURPER_HP,
                  TERRIBLE_USURPER_DMG,
                  empty_string.copy(),
-                 empty_string.copy()),
+                 empty_string.copy(),
+                 Ability('',0,0)),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/ash_demon.jpg')),
                  default_red_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -78,7 +80,8 @@ class BattleSprites:
                  ASH_DEMON_HP,
                  ASH_DEMON_DMG,
                  empty_string.copy(),
-                 empty_string.copy()),
+                 empty_string.copy(),
+                 Ability('',0,0)),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/water_storm.jpg')),
                  default_red_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -92,7 +95,8 @@ class BattleSprites:
                  WATER_STORM_HP,
                  WATER_STORM_DMG,
                  empty_string.copy(),
-                 empty_string.copy()),
+                 empty_string.copy(),
+                 Ability('',0,0)),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/blackout_shadow.jpg')),
                  default_red_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -106,7 +110,8 @@ class BattleSprites:
                  BLACKOUT_SHADOW_HP,
                  BLACKOUT_SHADOW_DMG,
                  empty_string.copy(),
-                 empty_string.copy()),
+                 empty_string.copy(),
+                 Ability('',0,0)),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/destroyer_of_earth.jpg')),
                  default_red_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -120,7 +125,8 @@ class BattleSprites:
                  DESTROYER_OF_EARTH_HP,
                  DESTROYER_OF_EARTH_DMG,
                  empty_string.copy(),
-                 empty_string.copy()),
+                 empty_string.copy(),
+                 Ability('',0,0)),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/malignant_infestation.jpg')),
                  default_red_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -134,7 +140,8 @@ class BattleSprites:
                  MALIGNANT_INFESTATION_HP,
                  MALIGNANT_INFESTATION_DMG,
                  empty_string.copy(),
-                 empty_string.copy()),
+                 empty_string.copy(),
+                 Ability('',0,0)),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/windstorm_shadow.jpg')),
                  default_red_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -148,7 +155,8 @@ class BattleSprites:
                  WINDSTORM_SHADOW_HP,
                  WINDSTORM_SHADOW_DMG,
                  empty_string.copy(),
-                 empty_string.copy()),
+                 empty_string.copy(),
+                 Ability('',0,0)),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/ghost_bird.jpg')),
                  default_red_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -162,7 +170,8 @@ class BattleSprites:
                  GHOST_BIRD_HP,
                  GHOST_BIRD_DMG,
                  empty_string.copy(),
-                 empty_string.copy())
+                 empty_string.copy(),
+                 Ability('',0,0))
         ]
         self.deck: list[Card] = deck
         self.battle: Background = Background(pygame.image.load('resources/img/maps/battle_map.jpeg'),
