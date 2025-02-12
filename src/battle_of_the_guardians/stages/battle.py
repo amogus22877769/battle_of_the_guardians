@@ -15,7 +15,8 @@ class Battle:
                                                                   self.sprites.opponents,
                                                                   self.sprites.opposition,
                                                                   self.sprites.waves_counter,
-                                                                  self.sprites.energy_bar)
+                                                                  self.sprites.energy_bar,
+                                                                  self.sprites.strings)
         self.is_this_the_first_iteration: bool = True
 
     def handle_events(self, actions: list[Action]) -> stage:
@@ -31,7 +32,7 @@ class Battle:
                             self.game_controller.ready(card)
                     for opp in self.sprites.opponents:
                         if opp.outline.rect.collidepoint(action.value):
-                            self.game_controller.attack(opp)
+                            self.game_controller.hit(opp)
         return 'battle'
 
     def draw(self, screen) -> None:
@@ -44,7 +45,8 @@ class Battle:
               for pair in card_pairs],
             *[pair
               for opponent_pairs in [opponent.to_draw_on_battle() for opponent in self.sprites.opponents]
-              for pair in opponent_pairs]])
+              for pair in opponent_pairs],
+        *[(string.image, string.rect) for string in self.sprites.strings]])
 
     def update(self, actions: list[Action]) -> stage:
         if self.is_this_the_first_iteration:

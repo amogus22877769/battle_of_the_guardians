@@ -12,7 +12,7 @@ from src.battle_of_the_guardians.config import DEFAULT_WIDTH, DEFAULT_HEIGHT, \
     RELATIVE_FANTASY_FONT_FOR_CARD_HEALTH_SIZE_USING_THE_DEFAULT_HP_BAR, TERRIBLE_USURPER_HP, TERRIBLE_USURPER_DMG, \
     ASH_DEMON_HP, ASH_DEMON_DMG, WATER_STORM_HP, WATER_STORM_DMG, BLACKOUT_SHADOW_HP, BLACKOUT_SHADOW_DMG, \
     DESTROYER_OF_EARTH_HP, DESTROYER_OF_EARTH_DMG, MALIGNANT_INFESTATION_HP, MALIGNANT_INFESTATION_DMG, \
-    WINDSTORM_SHADOW_HP, WINDSTORM_SHADOW_DMG, GHOST_BIRD_HP, GHOST_BIRD_DMG
+    WINDSTORM_SHADOW_HP, WINDSTORM_SHADOW_DMG, GHOST_BIRD_HP, GHOST_BIRD_DMG, RELATIVE_CHANGE_HEALTH_FONT_SIZE
 from src.battle_of_the_guardians.sprites.background import Background
 from src.battle_of_the_guardians.sprites.bar import Bar
 from src.battle_of_the_guardians.sprites.button import Button
@@ -196,6 +196,7 @@ class BattleSprites:
             NUMBER_OF_POINTS_IN_DEFAULT_ENERGY_BAR,
             TOTAL_ENERGY)
         self.opponents: list[Card] = []
+        self.strings: list[String] = []
 
     def update(self, new_window_size: tuple[int, int]) -> None:
         self.battle.update(new_window_size)
@@ -204,3 +205,4 @@ class BattleSprites:
         [opponent.update(new_window_size) for opponent in self.opponents]
         [opposition_member.update(new_window_size) for opposition_member in self.opposition]
         self.energy_bar.update(new_window_size)
+        [string.update(new_window_size) for string in self.strings]
