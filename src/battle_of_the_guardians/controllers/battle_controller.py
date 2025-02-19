@@ -4,9 +4,11 @@ from pathlib import Path
 import pygame
 
 from src.battle_of_the_guardians.animations import Animation
+from src.battle_of_the_guardians.buffer import CURRENT_WINDOW_SIZE
 from src.battle_of_the_guardians.config import ALL_CARD_COORDINATES, RELATIVE_DISTANCE_BETWEEN_CARD_AND_HP_BAR, \
     ALL_EVEN_OPPS_COORDINATES, ALL_ODD_OPPS_COORDINATES, CARD_SIZE_MULTIPLIER, TOTAL_ENERGY, \
-    RELATIVE_CHANGE_HEALTH_FONT_SIZE, DEFAULT_WIDTH, DEFAULT_HEIGHT, CHANGE_HEALTH_DURATION
+    RELATIVE_CHANGE_HEALTH_FONT_SIZE, DEFAULT_WIDTH, DEFAULT_HEIGHT, CHANGE_HEALTH_DURATION, SHADOW_ENERGY, \
+    SHADOW_HIT_COST
 from src.battle_of_the_guardians.defines import flag
 from src.battle_of_the_guardians.sprites.string import String
 from src.battle_of_the_guardians.structures.card import Card
@@ -38,6 +40,8 @@ class BattleController:
         self.pair = ()
         self.first_revenge: bool = True
         self.revenge_opps = []
+        self.current_opp_index: int = 0
+        self.old_target = None
 
     def place_cards(self):
         for card_index, card in enumerate(self.deck):
@@ -68,6 +72,13 @@ class BattleController:
                     self.opps.insert(opp_index, self.opps.pop(len(ALL_EVEN_OPPS_COORDINATES)))
 
     def new_wave(self) -> None:
+        self.strings.clear()
+        if self.opps:
+            opp = self.opps[self.current_opp_index - 1]
+            opp.sprite.resize((opp.sprite.relative_size[0] / CARD_SIZE_MULTIPLIER,
+                               opp.sprite.relative_size[1] / CARD_SIZE_MULTIPLIER))
+            opp.outline.resize((opp.outline.relative_size[0] / CARD_SIZE_MULTIPLIER,
+                                opp.outline.relative_size[1] / CARD_SIZE_MULTIPLIER))
         self.integer_waves_counter += 1
         self.waves_counter.text = self.waves_counter.text[:6] + f'{self.integer_waves_counter}'
         max_force: int = self.integer_waves_counter * 10 + 5
@@ -118,7 +129,7 @@ class BattleController:
                                 opp.hp_bar.relative_center_coordinates[1]),
                                Path('resources/fonts/fantasy_capitals.otf'),
                                RELATIVE_CHANGE_HEALTH_FONT_SIZE,
-                               (DEFAULT_WIDTH, DEFAULT_HEIGHT))
+                               (CURRENT_WINDOW_SIZE[0], CURRENT_WINDOW_SIZE[1]))
             self.strings.append(s)
             Animation([s],
                       CHANGE_HEALTH_DURATION,
@@ -131,13 +142,22 @@ class BattleController:
         self.strings.clear()
         card, opp = self.pair
         opp.current_health -= card.damage
-        card.ability.cast(card, self.deck, opp, self.opps, self.flags, self.energy_bar, self.revenge, self.strings)
+        if opp.current_health <= 0:
+            self.opps.remove(opp)
+            self.place_opps(free_coordinates=opp.sprite.relative_center_coordinates)
+        card.ability.cast(card, self.deck, opp, self.opps, self.flags, self.energy_bar, self.strings, next_action=self.revenge)\
+            if self.opps else self.new_wave()# and self.energy_bar.energy >= min([card.ability.cost for card in self.deck if card not in self.flags['dead']])\
 
     def revenge(self):
-        print(f'revenge())()()()()')
+        to_remove = []
+        for opp in self.opps:
+            if opp.current_health <= 0:
+                to_remove.append(opp)
+                self.place_opps(free_coordinates=opp.sprite.relative_center_coordinates)
+        [self.opps.remove(killed_opp) for killed_opp in to_remove]
+        print(f'revenge (i might swerve bend that corner woa - - a a -')
         if self.first_revenge:
             self.strings.clear()
-            shadow_energy: int = 15
             print(f'frozen: {self.flags.get('frozen', [])}')
             frozen = set()
             for opp in self.opps:
@@ -149,12 +169,19 @@ class BattleController:
                             frozen.add(opp)
             print(f'frozen: {self.flags.get('frozen', [])}')
             not_frozen_opps = [opp for opp in self.opps if opp not in frozen]
-            self.revenge_opps = choices(not_frozen_opps, k = min(5, len(not_frozen_opps)))
+            self.revenge_opps = choices(not_frozen_opps, k = min(int(SHADOW_ENERGY / SHADOW_HIT_COST), len(not_frozen_opps)))
+            self.first_revenge = False
+            self.current_opp_index = 0
+            self.revenge() if not_frozen_opps else self.new_wave()
         else:
-            for opp in self.revenge_opps:
-                alive_deck = [card for card in self.deck if card not in self.flags['dead']]
-                print(f'len {len(alive_deck)}')
-                target = choice(self.deck)
+            print(f'opp: {self.current_opp_index}')
+            if self.current_opp_index:
+                target = self.old_target
+                opp = self.opps[self.current_opp_index - 1]
+                opp.sprite.resize((opp.sprite.relative_size[0] / CARD_SIZE_MULTIPLIER,
+                                   opp.sprite.relative_size[1] / CARD_SIZE_MULTIPLIER))
+                opp.outline.resize((opp.outline.relative_size[0] / CARD_SIZE_MULTIPLIER,
+                                    opp.outline.relative_size[1] / CARD_SIZE_MULTIPLIER))
                 if target.current_health + target.current_shield - opp.damage > 0:
                     if target.shield:
                         target.current_shield -= opp.damage
@@ -167,10 +194,33 @@ class BattleController:
                     target.current_health = 0
                     target.shield = 0
                     self.flags['dead'].add(target)
-                    if len(alive_deck) == 1:
+                    if not [card for card in self.deck if card not in self.flags['dead']]:
                         pygame.quit()
                         print(f'sucker')
-                shadow_energy -= 3
+            self.strings.clear()
+            opp = self.opps[self.current_opp_index]
+            alive_deck = [card for card in self.deck if card not in self.flags['dead']]
+            opp.sprite.resize((opp.sprite.relative_size[0] * CARD_SIZE_MULTIPLIER,
+                                opp.sprite.relative_size[1] * CARD_SIZE_MULTIPLIER))
+            opp.outline.resize((opp.outline.relative_size[0] * CARD_SIZE_MULTIPLIER,
+                                 opp.outline.relative_size[1] * CARD_SIZE_MULTIPLIER))
+            target = choice(alive_deck)
+            s = String(
+                f'-{opp.damage if opp.damage <= target.current_health else opp.current_health}',
+                pygame.Color('red'),
+                (target.hp_bar.relative_center_coordinates[0] + target.hp_bar.relative_size[0] / 2,
+                 target.hp_bar.relative_center_coordinates[1]),
+                Path('resources/fonts/fantasy_capitals.otf'),
+                RELATIVE_CHANGE_HEALTH_FONT_SIZE,
+                (CURRENT_WINDOW_SIZE[0], CURRENT_WINDOW_SIZE[1]))
+            self.strings.append(s)
+            self.old_target = target
+            self.current_opp_index += 1
+            Animation([s],
+                      CHANGE_HEALTH_DURATION,
+                      (target.hp_bar.relative_center_coordinates[0] + target.hp_bar.relative_size[0] / 2,
+                       target.sprite.relative_center_coordinates[1])
+                      ).start(on_stop=self.revenge if self.current_opp_index != len(self.revenge_opps) - 1 else self.new_wave)
 
 
 

@@ -4,6 +4,7 @@ import pygame
 
 from src.battle_of_the_guardians import animations
 from src.battle_of_the_guardians.action import Action
+from src.battle_of_the_guardians.buffer import CURRENT_WINDOW_SIZE
 from src.battle_of_the_guardians.config import DEFAULT_WIDTH, DEFAULT_HEIGHT, NAME_OF_THE_GAME, FRAME_RATE
 from src.battle_of_the_guardians.defines import stage
 from src.battle_of_the_guardians.stages.battle import Battle
@@ -37,6 +38,8 @@ class Game:
         if self.screen.get_width() != self.old_screen_size[0] or self.screen.get_height() != self.old_screen_size[1]:
             self.actions.append(Action("resize", (self.screen.get_width(), self.screen.get_height())))
             self.old_screen_size = (self.screen.get_width(), self.screen.get_height())
+            CURRENT_WINDOW_SIZE[0], CURRENT_WINDOW_SIZE[1] = self.screen.get_width(), self.screen.get_height()
+            print(CURRENT_WINDOW_SIZE)
 
     def run(self) -> None:
         while True:

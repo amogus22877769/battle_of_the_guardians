@@ -205,4 +205,4 @@ class BattleSprites:
         [opponent.update(new_window_size) for opponent in self.opponents]
         [opposition_member.update(new_window_size) for opposition_member in self.opposition]
         self.energy_bar.update(new_window_size)
-        [string.update(new_window_size) for string in self.strings]
+        [st.update(new_window_size) for st in self.strings]
