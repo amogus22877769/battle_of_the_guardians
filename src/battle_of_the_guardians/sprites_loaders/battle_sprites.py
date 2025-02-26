@@ -200,21 +200,35 @@ class BattleSprites:
         self.strings: list[String] = []
         self.effects: dict[str: dict[Card | str: Object]] = {'dead':
                                                                  {'default':
-                                                                      Object(pygame.image.load('resources/img/effects/death_effect.jpeg'),
-                                                                             (RELATIVE_CARD_SIZE[0] -RELATIVE_BASIC_OUTLINE_THICKNESS[0] * 2,
-                                                                              RELATIVE_CARD_SIZE[1] -RELATIVE_BASIC_OUTLINE_THICKNESS[1] * 2),
+                                                                      Object(pygame.image.load(
+                                                                          'resources/img/effects/death_effect.jpeg'),
+                                                                             (RELATIVE_CARD_SIZE[0] -
+                                                                              RELATIVE_BASIC_OUTLINE_THICKNESS[0] * 2,
+                                                                              RELATIVE_CARD_SIZE[1] -
+                                                                              RELATIVE_BASIC_OUTLINE_THICKNESS[1] * 2),
                                                                              (DEFAULT_WIDTH, DEFAULT_HEIGHT),
-                                                                             (-(RELATIVE_CARD_SIZE[0] - RELATIVE_BASIC_OUTLINE_THICKNESS[0] * 2) / 2,
-                                                                              -(RELATIVE_CARD_SIZE[1] - RELATIVE_BASIC_OUTLINE_THICKNESS[1] * 2) / 2),
+                                                                             (-(RELATIVE_CARD_SIZE[0] -
+                                                                                RELATIVE_BASIC_OUTLINE_THICKNESS[
+                                                                                    0] * 2) / 2,
+                                                                              -(RELATIVE_CARD_SIZE[1] -
+                                                                                RELATIVE_BASIC_OUTLINE_THICKNESS[
+                                                                                    1] * 2) / 2),
                                                                              alpha=DEATH_EFFECT_ALPHA)},
                                                              'frozen':
                                                                  {'default':
-                                                                      Object(pygame.image.load('resources/img/effects/freeze_effect.jpeg'),
-                                                                             (RELATIVE_CARD_SIZE[0] -RELATIVE_BASIC_OUTLINE_THICKNESS[0] * 2,
-                                                                              RELATIVE_CARD_SIZE[1] -RELATIVE_BASIC_OUTLINE_THICKNESS[1] * 2),
+                                                                      Object(pygame.image.load(
+                                                                          'resources/img/effects/freeze_effect.jpeg'),
+                                                                             (RELATIVE_CARD_SIZE[0] -
+                                                                              RELATIVE_BASIC_OUTLINE_THICKNESS[0] * 2,
+                                                                              RELATIVE_CARD_SIZE[1] -
+                                                                              RELATIVE_BASIC_OUTLINE_THICKNESS[1] * 2),
                                                                              (DEFAULT_WIDTH, DEFAULT_HEIGHT),
-                                                                             (-(RELATIVE_CARD_SIZE[0] -RELATIVE_BASIC_OUTLINE_THICKNESS[0] * 2) / 2,
-                                                                              -(RELATIVE_CARD_SIZE[1] -RELATIVE_BASIC_OUTLINE_THICKNESS[1] * 2) / 2),
+                                                                             (-(RELATIVE_CARD_SIZE[0] -
+                                                                                RELATIVE_BASIC_OUTLINE_THICKNESS[
+                                                                                    0] * 2) / 2,
+                                                                              -(RELATIVE_CARD_SIZE[1] -
+                                                                                RELATIVE_BASIC_OUTLINE_THICKNESS[
+                                                                                    1] * 2) / 2),
                                                                              alpha=FREEZE_EFFECT_ALPHA)}}
 
     def update(self, new_window_size: tuple[int, int]) -> None:

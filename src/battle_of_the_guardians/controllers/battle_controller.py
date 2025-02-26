@@ -7,10 +7,8 @@ from src.battle_of_the_guardians.animations import Animation
 from src.battle_of_the_guardians.buffer import CURRENT_WINDOW_SIZE
 from src.battle_of_the_guardians.config import ALL_CARD_COORDINATES, RELATIVE_DISTANCE_BETWEEN_CARD_AND_HP_BAR, \
     ALL_EVEN_OPPS_COORDINATES, ALL_ODD_OPPS_COORDINATES, CARD_SIZE_MULTIPLIER, TOTAL_ENERGY, \
-    RELATIVE_CHANGE_HEALTH_FONT_SIZE, DEFAULT_WIDTH, DEFAULT_HEIGHT, CHANGE_HEALTH_DURATION, SHADOW_ENERGY, \
+    RELATIVE_CHANGE_HEALTH_FONT_SIZE, CHANGE_HEALTH_DURATION, SHADOW_ENERGY, \
     SHADOW_HIT_COST
-from src.battle_of_the_guardians.defines import flag
-from src.battle_of_the_guardians.sprites.object import Object
 from src.battle_of_the_guardians.sprites.string import String
 from src.battle_of_the_guardians.structures.card import Card
 from random import choice, choices
@@ -19,7 +17,8 @@ from src.battle_of_the_guardians.structures.energy_bar import EnergyBar
 
 
 class BattleController:
-    def __init__(self, deck: list[Card], opps: list[Card], opposition: list[Card], waves_counter: String, energy_bar:EnergyBar, strings, effects) -> None:
+    def __init__(self, deck: list[Card], opps: list[Card], opposition: list[Card], waves_counter: String,
+                 energy_bar: EnergyBar, strings, effects) -> None:
         self.deck: list[Card] = deck
         self.opps: list[Card] = opps
         self.opposition: list[Card] = opposition
@@ -29,7 +28,7 @@ class BattleController:
         self.effects = effects
         self.integer_waves_counter: int = int(waves_counter.text[6:])
         self.flags: dict[str, set[Card] | list[set[Card]]] = {'ready': set(),
-                                             'dead': set()}
+                                                              'dead': set()}
         self.dict_of_strong_opps = {self.opposition[0]: 2,
                                     self.opposition[1]: 3,
                                     self.opposition[2]: 3,
@@ -126,12 +125,12 @@ class BattleController:
             self.energy_bar.energy -= card.ability.cost
             self.pair = (card, opp)
             s = String(f'-{card.damage if card.damage <= opp.current_health else opp.current_health}',
-                               pygame.Color('red'),
-                               (opp.hp_bar.relative_center_coordinates[0] + opp.hp_bar.relative_size[0] / 2,
-                                opp.hp_bar.relative_center_coordinates[1]),
-                               Path('resources/fonts/fantasy_capitals.otf'),
-                               RELATIVE_CHANGE_HEALTH_FONT_SIZE,
-                               (CURRENT_WINDOW_SIZE[0], CURRENT_WINDOW_SIZE[1]))
+                       pygame.Color('red'),
+                       (opp.hp_bar.relative_center_coordinates[0] + opp.hp_bar.relative_size[0] / 2,
+                        opp.hp_bar.relative_center_coordinates[1]),
+                       Path('resources/fonts/fantasy_capitals.otf'),
+                       RELATIVE_CHANGE_HEALTH_FONT_SIZE,
+                       (CURRENT_WINDOW_SIZE[0], CURRENT_WINDOW_SIZE[1]))
             self.strings.append(s)
             Animation([s],
                       CHANGE_HEALTH_DURATION,
@@ -149,20 +148,27 @@ class BattleController:
             dead_opp_index = self.opps.index(opp)
             self.opps.remove(opp)
         self.place_opps()
-        print(f'en: {self.energy_bar.energy}, min: {min([card.ability.cost for card in self.deck if card not in self.flags['dead']])}')
+        print(
+            f'en: {self.energy_bar.energy}, min: {min([card.ability.cost for card in self.deck if card not in self.flags['dead']])}')
+
         def after_ability():
             self.strings.clear()
             print(f'strings cleared')
             self.carry_out_dead_opps()
 
         if self.not_frozen_opps():
-            if self.energy_bar.energy < min([card.ability.cost for card in self.deck if card not in self.flags['dead']]):
+            if self.energy_bar.energy < min(
+                    [card.ability.cost for card in self.deck if card not in self.flags['dead']]):
                 print(f'en < min')
-                card.ability.cast(card, self.deck, opp, self.opps, self.flags, self.energy_bar, self.strings, self.effects,
-                                  next_action=self.revenge, ability_on_dead_opp=dead_opp_index if opp.current_health <= 0 else -1)
+                card.ability.cast(card, self.deck, opp, self.opps, self.flags, self.energy_bar, self.strings,
+                                  self.effects,
+                                  next_action=self.revenge,
+                                  ability_on_dead_opp=dead_opp_index if opp.current_health <= 0 else -1)
             else:
-                card.ability.cast(card, self.deck, opp, self.opps, self.flags, self.energy_bar, self.strings, self.effects,
-                                  next_action=after_ability, ability_on_dead_opp=dead_opp_index if opp.current_health <= 0 else -1)
+                card.ability.cast(card, self.deck, opp, self.opps, self.flags, self.energy_bar, self.strings,
+                                  self.effects,
+                                  next_action=after_ability,
+                                  ability_on_dead_opp=dead_opp_index if opp.current_health <= 0 else -1)
         else:
             self.new_wave()
 
@@ -173,7 +179,8 @@ class BattleController:
             self.strings.clear()
             print(f'frozen: {self.flags.get('frozen', [])}')
             not_frozen_opps = self.not_frozen_opps()
-            self.revenge_opps = choices(not_frozen_opps, k = min(int(SHADOW_ENERGY / SHADOW_HIT_COST), len(not_frozen_opps)))
+            self.revenge_opps = choices(not_frozen_opps,
+                                        k=min(int(SHADOW_ENERGY / SHADOW_HIT_COST), len(not_frozen_opps)))
             self.first_revenge = False
             self.current_opp_index = 0
             print(f'revenge opps: {len(self.revenge_opps)}')
@@ -220,7 +227,8 @@ class BattleController:
                       CHANGE_HEALTH_DURATION,
                       (target.hp_bar.relative_center_coordinates[0] + target.hp_bar.relative_size[0] / 2,
                        target.sprite.relative_center_coordinates[1])
-                      ).start(on_stop=self.revenge if self.current_opp_index != len(self.revenge_opps) - 1 else self.new_wave)
+                      ).start(
+                on_stop=self.revenge if self.current_opp_index != len(self.revenge_opps) - 1 else self.new_wave)
             self.current_opp_index += 1
 
     def not_frozen_opps(self):
@@ -245,10 +253,3 @@ class BattleController:
         self.place_opps()
         if not self.not_frozen_opps():
             self.new_wave()
-
-
-
-
-
-
-

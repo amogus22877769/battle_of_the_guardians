@@ -43,10 +43,10 @@ class Battle:
             *[pair
               for opponent_pairs in [opponent.to_draw_on_battle() for opponent in self.sprites.opponents]
               for pair in opponent_pairs],
-        *[(string.image, string.rect) for string in self.sprites.strings],
-        *[(effect.image, effect.rect)
-         for group_of_effects in self.sprites.effects.values()
-         for effect in group_of_effects.values()]])
+            *[(string.image, string.rect) for string in self.sprites.strings],
+            *[(effect.image, effect.rect)
+              for group_of_effects in self.sprites.effects.values()
+              for effect in group_of_effects.values()]])
 
     def update(self, actions: list[Action]) -> stage:
         if self.is_this_the_first_iteration:

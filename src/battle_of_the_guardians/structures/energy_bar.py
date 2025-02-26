@@ -29,7 +29,6 @@ class EnergyBar:
         self.place()
 
     def to_draw(self) -> list[tuple[pygame.Surface, pygame.Rect]]:
-
         # return [self.bar, self.icon, self.points[:self.count_of_visible_points]]
 
         return [(self.bar.image, self.bar.rect), (self.icon.image, self.icon.rect),
@@ -42,8 +41,8 @@ class EnergyBar:
         for point_index, point in enumerate(self.points):
             point.place((self.bar.relative_center_coordinates[0] - self.bar.relative_size[0] / 2 +
                          self.bar.relative_thickness[0] + (
-                                     point.relative_bar_size[1] - point.relative_bar_thickness[1] * 2) * (
-                                     point_index + 0.5),
+                                 point.relative_bar_size[1] - point.relative_bar_thickness[1] * 2) * (
+                                 point_index + 0.5),
                          self.bar.relative_center_coordinates[1]))
 
     @property

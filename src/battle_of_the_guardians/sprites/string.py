@@ -4,7 +4,8 @@ from pathlib import Path
 
 
 class String(pygame.sprite.Sprite):
-    def __init__(self, text: str, color: pygame.Color, relative_center_coordinates: tuple[float, float], font_path: Path,
+    def __init__(self, text: str, color: pygame.Color, relative_center_coordinates: tuple[float, float],
+                 font_path: Path,
                  relative_size: float, window_size: tuple[int, int]) -> None:
         pygame.sprite.Sprite.__init__(self)
         self._text = text
@@ -53,4 +54,5 @@ class String(pygame.sprite.Sprite):
                          self.rect.height)
 
     def copy(self):
-        return String(self.text, self.color, self.relative_center_coordinates, self.path, self.relative_size, self.window_size)
+        return String(self.text, self.color, self.relative_center_coordinates, self.path, self.relative_size,
+                      self.window_size)

@@ -80,8 +80,8 @@ class Card:
                                self.hp_string.relative_center_coordinates[1] - self.hp_string.relative_size / 2
                                - self.shield_bar.relative_size[1] / 2))
         self.shield_icon.place((self.shield_bar.relative_center_coordinates[0] - self.shield_bar.relative_size[0] / 2 -
-                            self.shield_icon.relative_size[0] / 2,
-                            self.shield_bar.relative_center_coordinates[1]))
+                                self.shield_icon.relative_size[0] / 2,
+                                self.shield_bar.relative_center_coordinates[1]))
         self.place_shield_points()
         self.shield_string.place((self.shield_bar.relative_center_coordinates[0],
                                   self.shield_bar.relative_center_coordinates[1] - self.shield_bar.relative_size[
@@ -166,7 +166,8 @@ class Card:
         return [(self.sprite.image, self.sprite.rect), (self.outline.image, self.outline.rect),
                 (self.hp_bar.image, self.hp_bar.rect), (self.hp_icon.image, self.hp_icon.rect),
                 (self.hp_string.image, self.hp_string.rect),
-                *[(self.shield_string.image, self.shield_string.rect) for _ in [0] if self._shield and self._current_shield],
+                *[(self.shield_string.image, self.shield_string.rect) for _ in [0] if
+                  self._shield and self._current_shield],
                 *[(self.shield_bar.image, self.shield_bar.rect) for _ in [0] if
                   self._shield and self._current_shield],
                 *[(self.shield_icon.image, self.shield_icon.rect) for _ in [0] if
@@ -226,7 +227,8 @@ class Card:
         return Card(self.sprite.copy(), self.outline.copy(), self.relative_outline_thickness,
                     self.window_size, self.hp_bar.copy(), self.hp_icon.copy(), self.health_points[0].copy(),
                     self.shield_bar.copy(), self.shield_icon.copy(), self.shield_points[0].copy(),
-                    self.health, self.damage, self.hp_string.copy(), self.shield_string.copy(), self.ability, shield=self._shield)
+                    self.health, self.damage, self.hp_string.copy(), self.shield_string.copy(), self.ability,
+                    shield=self._shield)
 
     def resize(self, multiplier):
         self.sprite.resize((self.sprite.relative_size[0] * multiplier,
