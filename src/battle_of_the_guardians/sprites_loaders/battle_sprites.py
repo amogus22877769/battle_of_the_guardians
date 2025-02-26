@@ -12,7 +12,8 @@ from src.battle_of_the_guardians.config import DEFAULT_WIDTH, DEFAULT_HEIGHT, \
     RELATIVE_FANTASY_FONT_FOR_CARD_HEALTH_SIZE_USING_THE_DEFAULT_HP_BAR, TERRIBLE_USURPER_HP, TERRIBLE_USURPER_DMG, \
     ASH_DEMON_HP, ASH_DEMON_DMG, WATER_STORM_HP, WATER_STORM_DMG, BLACKOUT_SHADOW_HP, BLACKOUT_SHADOW_DMG, \
     DESTROYER_OF_EARTH_HP, DESTROYER_OF_EARTH_DMG, MALIGNANT_INFESTATION_HP, MALIGNANT_INFESTATION_DMG, \
-    WINDSTORM_SHADOW_HP, WINDSTORM_SHADOW_DMG, GHOST_BIRD_HP, GHOST_BIRD_DMG, RELATIVE_CHANGE_HEALTH_FONT_SIZE
+    WINDSTORM_SHADOW_HP, WINDSTORM_SHADOW_DMG, GHOST_BIRD_HP, GHOST_BIRD_DMG, RELATIVE_CHANGE_HEALTH_FONT_SIZE, \
+    DEATH_EFFECT_ALPHA, FREEZE_EFFECT_ALPHA
 from src.battle_of_the_guardians.sprites.background import Background
 from src.battle_of_the_guardians.sprites.bar import Bar
 from src.battle_of_the_guardians.sprites.button import Button
@@ -66,7 +67,7 @@ class BattleSprites:
                  TERRIBLE_USURPER_DMG,
                  empty_string.copy(),
                  empty_string.copy(),
-                 Ability('',0,0)),
+                 Ability('', 0, 0)),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/ash_demon.jpg')),
                  default_red_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -81,7 +82,7 @@ class BattleSprites:
                  ASH_DEMON_DMG,
                  empty_string.copy(),
                  empty_string.copy(),
-                 Ability('',0,0)),
+                 Ability('', 0, 0)),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/water_storm.jpg')),
                  default_red_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -96,7 +97,7 @@ class BattleSprites:
                  WATER_STORM_DMG,
                  empty_string.copy(),
                  empty_string.copy(),
-                 Ability('',0,0)),
+                 Ability('', 0, 0)),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/blackout_shadow.jpg')),
                  default_red_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -111,7 +112,7 @@ class BattleSprites:
                  BLACKOUT_SHADOW_DMG,
                  empty_string.copy(),
                  empty_string.copy(),
-                 Ability('',0,0)),
+                 Ability('', 0, 0)),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/destroyer_of_earth.jpg')),
                  default_red_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -126,7 +127,7 @@ class BattleSprites:
                  DESTROYER_OF_EARTH_DMG,
                  empty_string.copy(),
                  empty_string.copy(),
-                 Ability('',0,0)),
+                 Ability('', 0, 0)),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/malignant_infestation.jpg')),
                  default_red_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -141,7 +142,7 @@ class BattleSprites:
                  MALIGNANT_INFESTATION_DMG,
                  empty_string.copy(),
                  empty_string.copy(),
-                 Ability('',0,0)),
+                 Ability('', 0, 0)),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/windstorm_shadow.jpg')),
                  default_red_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -156,7 +157,7 @@ class BattleSprites:
                  WINDSTORM_SHADOW_DMG,
                  empty_string.copy(),
                  empty_string.copy(),
-                 Ability('',0,0)),
+                 Ability('', 0, 0)),
             Card(empty_card.copy_consts(pygame.image.load('resources/img/cards/ghost_bird.jpg')),
                  default_red_outline.copy(),
                  RELATIVE_BASIC_OUTLINE_THICKNESS,
@@ -171,7 +172,7 @@ class BattleSprites:
                  GHOST_BIRD_DMG,
                  empty_string.copy(),
                  empty_string.copy(),
-                 Ability('',0,0))
+                 Ability('', 0, 0))
         ]
         self.deck: list[Card] = deck
         self.battle: Background = Background(pygame.image.load('resources/img/maps/battle_map.jpeg'),
@@ -197,6 +198,24 @@ class BattleSprites:
             TOTAL_ENERGY)
         self.opponents: list[Card] = []
         self.strings: list[String] = []
+        self.effects: dict[str: dict[Card | str: Object]] = {'dead':
+                                                                 {'default':
+                                                                      Object(pygame.image.load('resources/img/effects/death_effect.jpeg'),
+                                                                             (RELATIVE_CARD_SIZE[0] -RELATIVE_BASIC_OUTLINE_THICKNESS[0] * 2,
+                                                                              RELATIVE_CARD_SIZE[1] -RELATIVE_BASIC_OUTLINE_THICKNESS[1] * 2),
+                                                                             (DEFAULT_WIDTH, DEFAULT_HEIGHT),
+                                                                             (-(RELATIVE_CARD_SIZE[0] - RELATIVE_BASIC_OUTLINE_THICKNESS[0] * 2) / 2,
+                                                                              -(RELATIVE_CARD_SIZE[1] - RELATIVE_BASIC_OUTLINE_THICKNESS[1] * 2) / 2),
+                                                                             alpha=DEATH_EFFECT_ALPHA)},
+                                                             'frozen':
+                                                                 {'default':
+                                                                      Object(pygame.image.load('resources/img/effects/freeze_effect.jpeg'),
+                                                                             (RELATIVE_CARD_SIZE[0] -RELATIVE_BASIC_OUTLINE_THICKNESS[0] * 2,
+                                                                              RELATIVE_CARD_SIZE[1] -RELATIVE_BASIC_OUTLINE_THICKNESS[1] * 2),
+                                                                             (DEFAULT_WIDTH, DEFAULT_HEIGHT),
+                                                                             (-(RELATIVE_CARD_SIZE[0] -RELATIVE_BASIC_OUTLINE_THICKNESS[0] * 2) / 2,
+                                                                              -(RELATIVE_CARD_SIZE[1] -RELATIVE_BASIC_OUTLINE_THICKNESS[1] * 2) / 2),
+                                                                             alpha=FREEZE_EFFECT_ALPHA)}}
 
     def update(self, new_window_size: tuple[int, int]) -> None:
         self.battle.update(new_window_size)
@@ -206,3 +225,6 @@ class BattleSprites:
         [opposition_member.update(new_window_size) for opposition_member in self.opposition]
         self.energy_bar.update(new_window_size)
         [st.update(new_window_size) for st in self.strings]
+        [effect.update(new_window_size)
+         for group_of_effects in self.effects.values()
+         for effect in group_of_effects.values()]

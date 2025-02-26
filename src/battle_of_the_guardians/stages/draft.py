@@ -22,7 +22,10 @@ class Draft:
                         self.controller.pick('right')
                 case "resize":
                     self.sprites.update(*action.value)
-        return self.controller.stage
+        if self.controller.stage == 'battle':
+            self.controller.stage = 'draft'
+            return 'battle'
+        return 'draft'
 
     def draw(self, screen) -> None:
         screen.blits(blit_sequence=[
@@ -32,4 +35,8 @@ class Draft:
             *self.sprites.cards[self.controller.local_stage_multiplied_by_two + 1].to_draw_on_draft()])
 
     def update(self, actions: list[Action]) -> stage:
+        if self.controller.is_this_the_first_iteration:
+            self.controller.place()
+            self.controller.is_this_the_first_iteration = False
+            print('first')
         return self.handle_events(actions)

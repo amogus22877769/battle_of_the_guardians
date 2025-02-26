@@ -10,6 +10,7 @@ from src.battle_of_the_guardians.defines import stage
 from src.battle_of_the_guardians.stages.battle import Battle
 from src.battle_of_the_guardians.stages.draft import Draft
 from src.battle_of_the_guardians.stages.menu import Menu
+from src.battle_of_the_guardians.stages.you_lost import YouLost
 
 
 class Game:
@@ -24,7 +25,8 @@ class Game:
         self.stage: stage = "menu"
         self.stages: dict[stage, Menu | Draft] = {"menu": Menu(),
                                                   "draft": Draft(),
-                                                  "battle": Battle()}
+                                                  "battle": Battle(),
+                                                  "you_lost": YouLost()}
         self.actions: list[Action] = []
         self.old_screen_size: tuple[int, int] = (DEFAULT_WIDTH, DEFAULT_HEIGHT)
 

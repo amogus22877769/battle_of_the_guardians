@@ -1,6 +1,3 @@
-import pygame
-from pygame.sprite import Group
-
 from src.battle_of_the_guardians.action import Action
 from src.battle_of_the_guardians.buffer import buffer_deck
 from src.battle_of_the_guardians.controllers.battle_controller import BattleController
@@ -16,11 +13,11 @@ class Battle:
                                                                   self.sprites.opposition,
                                                                   self.sprites.waves_counter,
                                                                   self.sprites.energy_bar,
-                                                                  self.sprites.strings)
+                                                                  self.sprites.strings,
+                                                                  self.sprites.effects)
         self.is_this_the_first_iteration: bool = True
 
     def handle_events(self, actions: list[Action]) -> stage:
-
         for action in actions:
             match action.kind:
                 case 'resize':
@@ -33,7 +30,7 @@ class Battle:
                     for opp in self.sprites.opponents:
                         if opp.outline.rect.collidepoint(action.value):
                             self.game_controller.hit(opp)
-        return 'battle'
+        return 'battle' if not self.game_controller.lost else 'you_lost'
 
     def draw(self, screen) -> None:
         screen.blits(blit_sequence=[
@@ -46,7 +43,10 @@ class Battle:
             *[pair
               for opponent_pairs in [opponent.to_draw_on_battle() for opponent in self.sprites.opponents]
               for pair in opponent_pairs],
-        *[(string.image, string.rect) for string in self.sprites.strings]])
+        *[(string.image, string.rect) for string in self.sprites.strings],
+        *[(effect.image, effect.rect)
+         for group_of_effects in self.sprites.effects.values()
+         for effect in group_of_effects.values()]])
 
     def update(self, actions: list[Action]) -> stage:
         if self.is_this_the_first_iteration:

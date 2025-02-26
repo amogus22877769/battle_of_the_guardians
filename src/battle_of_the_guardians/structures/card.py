@@ -227,3 +227,19 @@ class Card:
                     self.window_size, self.hp_bar.copy(), self.hp_icon.copy(), self.health_points[0].copy(),
                     self.shield_bar.copy(), self.shield_icon.copy(), self.shield_points[0].copy(),
                     self.health, self.damage, self.hp_string.copy(), self.shield_string.copy(), self.ability, shield=self._shield)
+
+    def resize(self, multiplier):
+        self.sprite.resize((self.sprite.relative_size[0] * multiplier,
+                            self.sprite.relative_size[1] * multiplier))
+        self.outline.resize((self.outline.relative_size[0] * multiplier,
+                             self.outline.relative_size[1] * multiplier))
+
+    def __repr__(self):
+        return {'fire_wave': 'fire_wizard',
+                'fire_breathe': 'fire_dragon',
+                'heal': 'mermaid',
+                'ground_protection': 'ground_titan',
+                'strong': 'stone_dwarf',
+                'thunder_punch': 'electro_wizard',
+                'ice_wall': 'ice_wizard',
+                'acceleration': 'blazing_herald'}[self.ability.kind]
