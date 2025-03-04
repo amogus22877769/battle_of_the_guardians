@@ -29,7 +29,7 @@ class Ability:
                 def modifier():
                     def inner():
                         opponent_ind: int = opponents.index(
-                            target_opponent) - 1 if ability_on_dead_opp != -1 else ability_on_dead_opp
+                            target_opponent) - 1 if ability_on_dead_opp == -1 else ability_on_dead_opp
                         for j in range(3):
                             if j in range(len(opponents)):
                                 opponents[opponent_ind].current_health -= self.value
@@ -38,7 +38,7 @@ class Ability:
                     return inner
 
                 opponent_index: int = opponents.index(
-                    target_opponent) - 1 if ability_on_dead_opp != -1 else ability_on_dead_opp
+                    target_opponent) - 1 if ability_on_dead_opp == -1 else ability_on_dead_opp
                 flag: bool = False
                 for i in range(3):
                     if opponent_index in range(len(opponents)):
@@ -86,28 +86,24 @@ class Ability:
                                opponent.sprite.relative_center_coordinates[1])
                               ).start(on_stop=modifier() if not opponent_index else lambda: None)
             case 'ice_wall':
-                if 'frozen' not in flags.keys():
+                if not flags['frozen']:
                     print(f'setting frozen')
                     flags['frozen'] = [set() for _ in range(self.value)]
-                print(flags['frozen'])
-                frozen: bool = False
-                for froze_set in flags['frozen']:
-                    if target_opponent in froze_set:
-                        frozen = True
-                        break
-                if not frozen:
+                if target_opponent not in effects['frozen']:
                     flags['frozen'][self.value - 1].add(target_opponent)
-                print(self.value - 1)
-                print(flags['frozen'][0], flags['frozen'][1])
+                    effects['frozen'][target_opponent] = effects['frozen']['default'].copy()
+                    effects['frozen'][target_opponent].place(target_opponent.sprite.relative_center_coordinates)
+                next_action()
+
             case 'heal':
                 chosen_card: Card = random.choice(cards)
                 if chosen_card.current_health < chosen_card.health:
-                    if not chosen_card.current_health:
-                        flags['dead'].remove(chosen_card)
-                        delitem(effects['dead'], chosen_card)
 
                     def modifier():
                         def inner():
+                            if not chosen_card.current_health:
+                                flags['dead'].remove(chosen_card)
+                                delitem(effects['dead'], chosen_card)
                             chosen_card.current_health += self.value
                             next_action()
 
@@ -134,34 +130,41 @@ class Ability:
                 def modifier():
                     def inner():
                         for local_card in cards:
-                            local_card.shield = local_card.current_shield + self.value
+                            local_card.shield = local_card.current_shield + self.value if local_card not in flags['dead'] else local_card.current_shield
                         next_action()
 
                     return inner
 
                 flag: bool = False
                 for card in cards:
-                    s = String(f'+{self.value}',
-                               pygame.Color('lightblue'),
-                               (card.hp_bar.relative_center_coordinates[0] + card.hp_bar.relative_size[0] / 2,
-                                card.sprite.relative_center_coordinates[1]),
-                               Path('resources/fonts/fantasy_capitals.otf'),
-                               RELATIVE_CHANGE_HEALTH_FONT_SIZE,
-                               (CURRENT_WINDOW_SIZE[0], CURRENT_WINDOW_SIZE[1]))
-                    strings.append(s)
-                    Animation([s],
-                              CHANGE_HEALTH_DURATION,
-                              (card.shield_bar.relative_center_coordinates[0] + card.shield_bar.relative_size[0] / 2,
-                               card.shield_bar.relative_center_coordinates[1])
-                              ).start(on_stop=modifier() if not flag else lambda: None)
-                    flag = True
+                    if card not in flags['dead']:
+                        s = String(f'+{self.value}',
+                                   pygame.Color('lightblue'),
+                                   (card.hp_bar.relative_center_coordinates[0] + card.hp_bar.relative_size[0] / 2,
+                                    card.sprite.relative_center_coordinates[1]),
+                                   Path('resources/fonts/fantasy_capitals.otf'),
+                                   RELATIVE_CHANGE_HEALTH_FONT_SIZE,
+                                   (CURRENT_WINDOW_SIZE[0], CURRENT_WINDOW_SIZE[1]))
+                        strings.append(s)
+                        Animation([s],
+                                  CHANGE_HEALTH_DURATION,
+                                  (card.shield_bar.relative_center_coordinates[0] + card.shield_bar.relative_size[0] / 2,
+                                   card.shield_bar.relative_center_coordinates[1])
+                                  ).start(on_stop=modifier() if not flag else lambda: None)
+                        flag = True
 
             case 'strong':
                 def modifier():
                     def inner():
                         if cards.index(target_card) - 1 in range(len(cards)):
+                            if not cards[cards.index(target_card) - 1].current_health:
+                                flags['dead'].remove(cards[cards.index(target_card) - 1])
+                                delitem(effects['dead'], cards[cards.index(target_card) - 1])
                             cards[cards.index(target_card) - 1].current_health += self.value
                         if cards.index(target_card) + 1 in range(len(cards)):
+                            if not cards[cards.index(target_card) + 1].current_health:
+                                flags['dead'].remove(cards[cards.index(target_card) + 1])
+                                delitem(effects['dead'], cards[cards.index(target_card) + 1])
                             cards[cards.index(target_card) + 1].current_health += self.value
                         next_action()
 
@@ -171,9 +174,6 @@ class Ability:
                 if cards.index(target_card) - 1 in range(len(cards)):
                     card = cards[cards.index(target_card) - 1]
                     if card.current_health < card.health:
-                        if not card.current_health:
-                            flags['dead'].remove(card)
-                            delitem(effects['dead'], card)
                         s = String(
                             f'+{self.value if self.value <= card.health - card.current_health else card.health - card.current_health}',
                             pygame.Color('green'),
@@ -192,9 +192,6 @@ class Ability:
                 if cards.index(target_card) + 1 in range(len(cards)):
                     card = cards[cards.index(target_card) + 1]
                     if card.current_health < card.health:
-                        if not card.current_health:
-                            flags['dead'].remove(card)
-                            delitem(effects['dead'], card)
                         s = String(
                             f'+{self.value if self.value <= card.health - card.current_health else card.health - card.current_health}',
                             pygame.Color('green'),

@@ -54,9 +54,9 @@ class Card:
         self.shield_string = shield_string
         self.hp_string.text = f'{self._current_health}'
         self._shield = shield
+        self.default_shield = self._shield
         self._current_shield = self.shield
         self.shield_string.text = f'{self._current_shield}'
-
         self.ability = ability
 
     def place(self, relative_center_coordinates: tuple[float, float]) -> None:
@@ -135,7 +135,7 @@ class Card:
 
     @current_shield.setter
     def current_shield(self, value: int):
-        self._current_shield = value
+        self._current_shield = value if value >= 0 else 0
         self.count_of_visible_shield_points = int(self._current_shield / self.shield *
                                                   self.max_count_of_visible_shield_points)
         self.shield_string.text = f'{self._current_shield}'
@@ -244,4 +244,4 @@ class Card:
                 'strong': 'stone_dwarf',
                 'thunder_punch': 'electro_wizard',
                 'ice_wall': 'ice_wizard',
-                'acceleration': 'blazing_herald'}[self.ability.kind]
+                'acceleration': 'blazing_herald'}[self.ability.kind] + f' current_shield: {self.current_shield}, shield: {self.shield}'

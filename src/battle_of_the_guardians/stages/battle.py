@@ -15,7 +15,6 @@ class Battle:
                                                                   self.sprites.energy_bar,
                                                                   self.sprites.strings,
                                                                   self.sprites.effects)
-        self.is_this_the_first_iteration: bool = True
 
     def handle_events(self, actions: list[Action]) -> stage:
         for action in actions:
@@ -30,7 +29,11 @@ class Battle:
                     for opp in self.sprites.opponents:
                         if opp.outline.rect.collidepoint(action.value):
                             self.game_controller.hit(opp)
-        return 'battle' if not self.game_controller.lost else 'you_lost'
+        if not self.game_controller.lost:
+            return 'battle'
+        else:
+            self.game_controller.clear()
+            return 'you_lost'
 
     def draw(self, screen) -> None:
         screen.blits(blit_sequence=[
@@ -49,7 +52,7 @@ class Battle:
               for effect in group_of_effects.values()]])
 
     def update(self, actions: list[Action]) -> stage:
-        if self.is_this_the_first_iteration:
+        if self.game_controller.is_this_the_first_iteration:
             self.game_controller.new_wave()
-        self.is_this_the_first_iteration = False
+        self.game_controller.is_this_the_first_iteration = False
         return self.handle_events(actions)

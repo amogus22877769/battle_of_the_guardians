@@ -14,7 +14,7 @@ class Object(pygame.sprite.Sprite):
         self.window_size[0] * self.relative_size[0], self.window_size[1] * self.relative_size[1]))
         self.rect: pygame.Rect = self.image.get_rect()
         self.relative_center_coordinates: tuple[float, float] = relative_center_coordinates
-        self.alpha: int = alpha
+        self._alpha: int = alpha
         self.rect.update(self.relative_center_coordinates[0] * self.window_size[0] - self.rect.width / 2,
                          self.relative_center_coordinates[1] * self.window_size[1] - self.rect.height / 2,
                          self.rect.width,
@@ -35,7 +35,7 @@ class Object(pygame.sprite.Sprite):
 
     def copy(self):
         return Object(self.real_image, self.relative_size, self.window_size,
-                      relative_center_coordinates=self.relative_center_coordinates, alpha=self.alpha)
+                      relative_center_coordinates=self.relative_center_coordinates, alpha=self._alpha)
 
     def resize(self, new_relative_size: tuple[float, float]):
         self.relative_size = new_relative_size
@@ -53,3 +53,13 @@ class Object(pygame.sprite.Sprite):
                          self.relative_center_coordinates[1] * self.window_size[1] - self.rect.height / 2,
                          self.rect.width,
                          self.rect.height)
+
+    @property
+    def alpha(self):
+        return self._alpha
+
+    @alpha.setter
+    def alpha(self, new_alpha: int):
+        self._alpha = new_alpha
+        self.real_image.set_alpha(self._alpha)
+        self.real_image.set_alpha(self._alpha)

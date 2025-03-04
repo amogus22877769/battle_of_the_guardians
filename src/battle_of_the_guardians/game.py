@@ -36,7 +36,12 @@ class Game:
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.actions.append(Action("click", event.pos))
+                self.actions.append(Action("click", value=event.pos))
+            if event.type == pygame.TEXTINPUT:
+                self.actions.append(Action('text', value=event.text))
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_BACKSPACE:
+                    self.actions.append(Action('backspace'))
         if self.screen.get_width() != self.old_screen_size[0] or self.screen.get_height() != self.old_screen_size[1]:
             self.actions.append(Action("resize", (self.screen.get_width(), self.screen.get_height())))
             self.old_screen_size = (self.screen.get_width(), self.screen.get_height())
