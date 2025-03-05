@@ -4,7 +4,7 @@ from pathlib import Path
 import pygame
 
 from src.battle_of_the_guardians.animations import Animation
-from src.battle_of_the_guardians.buffer import CURRENT_WINDOW_SIZE
+from src.battle_of_the_guardians.buffer import CURRENT_WINDOW_SIZE, score
 from src.battle_of_the_guardians.config import ALL_CARD_COORDINATES, RELATIVE_DISTANCE_BETWEEN_CARD_AND_HP_BAR, \
     ALL_EVEN_OPPS_COORDINATES, ALL_ODD_OPPS_COORDINATES, CARD_SIZE_MULTIPLIER, TOTAL_ENERGY, \
     RELATIVE_CHANGE_HEALTH_FONT_SIZE, CHANGE_HEALTH_DURATION, \
@@ -255,6 +255,7 @@ class BattleController:
         [self.opps.remove(killed_opp) for killed_opp in to_remove]
 
     def clear(self):
+        score[0] = self.integer_waves_counter
         self.integer_waves_counter = 0
         self.waves_counter.text = self.waves_counter.text[:6] + f'{self.integer_waves_counter}'
         self.energy_bar.energy = TOTAL_ENERGY

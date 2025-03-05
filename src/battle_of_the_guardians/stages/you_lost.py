@@ -20,7 +20,8 @@ class YouLost:
     def draw(self, screen) -> None:
         screen.blits(blit_sequence=((self.sprites.background.image, self.sprites.background.rect),
                                     (self.sprites.return_button.image, self.sprites.return_button.rect),
-                                    (self.sprites.you_lost.image, self.sprites.you_lost.rect)))
+                                    (self.sprites.you_lost.image, self.sprites.you_lost.rect),
+                                    (self.sprites.result.image, self.sprites.result.rect)))
 
     def update(self, actions: list[Action]) -> stage:
         return self.handle_updates(actions)

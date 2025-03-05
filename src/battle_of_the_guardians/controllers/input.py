@@ -4,7 +4,7 @@ import pygame
 
 from src.battle_of_the_guardians.buffer import CURRENT_WINDOW_SIZE
 from src.battle_of_the_guardians.config import INPUT_BOX_RELATIVE_SIZE, DEFAULT_WIDTH, DEFAULT_HEIGHT, \
-    INPUT_BOX_RELATIVE_COORDINATES, INPUT_BOX_RELATIVE_OUTLINE_THICKNESS
+    USERNAME_BOX_RELATIVE_COORDINATES, INPUT_BOX_RELATIVE_OUTLINE_THICKNESS
 from src.battle_of_the_guardians.sprites.object import Object
 from src.battle_of_the_guardians.sprites.string import String
 
@@ -14,7 +14,7 @@ class Input:
         self.box: Object = box
         self.username: String = username
 
-    def update_username(self, new_text):
+    def update(self, new_text):
         self.username.text += new_text if self.username.font.size(self.username.text + new_text)[0] / CURRENT_WINDOW_SIZE[0] <= INPUT_BOX_RELATIVE_SIZE[0] - INPUT_BOX_RELATIVE_OUTLINE_THICKNESS[0] * 2 else ''
 
     def backspace(self):

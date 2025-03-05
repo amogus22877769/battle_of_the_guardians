@@ -10,6 +10,7 @@ from src.battle_of_the_guardians.defines import stage
 from src.battle_of_the_guardians.stages.battle import Battle
 from src.battle_of_the_guardians.stages.draft import Draft
 from src.battle_of_the_guardians.stages.menu import Menu
+from src.battle_of_the_guardians.stages.registration import Registration
 from src.battle_of_the_guardians.stages.you_lost import YouLost
 
 
@@ -22,8 +23,9 @@ class Game:
         pygame.display.set_icon(pygame.image.load('resources/img/icon.jpg'))
         pygame.display.set_caption(NAME_OF_THE_GAME)
         self.clock: pygame.time.Clock = pygame.time.Clock()
-        self.stage: stage = "menu"
-        self.stages: dict[stage, Menu | Draft] = {"menu": Menu(),
+        self.stage: stage = "registration"
+        self.stages: dict[stage, Menu | Draft] = {'registration': Registration(),
+                                                  "menu": Menu(),
                                                   "draft": Draft(),
                                                   "battle": Battle(),
                                                   "you_lost": YouLost()}
@@ -42,6 +44,8 @@ class Game:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_BACKSPACE:
                     self.actions.append(Action('backspace'))
+                if event.key == pygame.K_RETURN:
+                    self.actions.append(Action('enter'))
         if self.screen.get_width() != self.old_screen_size[0] or self.screen.get_height() != self.old_screen_size[1]:
             self.actions.append(Action("resize", (self.screen.get_width(), self.screen.get_height())))
             self.old_screen_size = (self.screen.get_width(), self.screen.get_height())

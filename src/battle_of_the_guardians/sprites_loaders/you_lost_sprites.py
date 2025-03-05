@@ -2,8 +2,10 @@ from pathlib import Path
 
 import pygame.image
 
+from src.battle_of_the_guardians.buffer import score
 from src.battle_of_the_guardians.config import DEFAULT_WIDTH, DEFAULT_HEIGHT, RELATIVE_YOU_LOST_COORDINATES, \
-    RELATIVE_FANTASY_FONT_FOR_YOU_LOST_SIZE, RELATIVE_RETURN_BUTTON_COORDINATES, RELATIVE_RETURN_BUTTON_SIZE
+    RELATIVE_FANTASY_FONT_FOR_YOU_LOST_SIZE, RELATIVE_RETURN_BUTTON_COORDINATES, RELATIVE_RETURN_BUTTON_SIZE, \
+    RELATIVE_RESULT_COORDINATES
 from src.battle_of_the_guardians.sprites.background import Background
 from src.battle_of_the_guardians.sprites.button import Button
 from src.battle_of_the_guardians.sprites.string import String
@@ -19,6 +21,9 @@ class YouLostSprites:
         self.return_button = Button(pygame.image.load('resources/img/buttons/return_button.png'),
                                     RELATIVE_RETURN_BUTTON_COORDINATES, RELATIVE_RETURN_BUTTON_SIZE,
                                     (DEFAULT_WIDTH, DEFAULT_HEIGHT))
+        self.result = self.you_lost.copy()
+        self.result.place(RELATIVE_RESULT_COORDINATES)
+        self.result.text = f'YOU SCORE: {score[0]}'
 
     def update(self, new_window_size: tuple[int, int]):
         self.background.update(new_window_size)
