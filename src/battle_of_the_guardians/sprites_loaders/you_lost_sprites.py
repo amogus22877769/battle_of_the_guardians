@@ -5,7 +5,7 @@ import pygame.image
 from src.battle_of_the_guardians.buffer import score
 from src.battle_of_the_guardians.config import DEFAULT_WIDTH, DEFAULT_HEIGHT, RELATIVE_YOU_LOST_COORDINATES, \
     RELATIVE_FANTASY_FONT_FOR_YOU_LOST_SIZE, RELATIVE_RETURN_BUTTON_COORDINATES, RELATIVE_RETURN_BUTTON_SIZE, \
-    RELATIVE_RESULT_COORDINATES
+    RELATIVE_RESULT_COORDINATES, RELATIVE_SHARE_BUTTON_COORDINATES
 from src.battle_of_the_guardians.sprites.background import Background
 from src.battle_of_the_guardians.sprites.button import Button
 from src.battle_of_the_guardians.sprites.string import String
@@ -24,8 +24,11 @@ class YouLostSprites:
         self.result = self.you_lost.copy()
         self.result.place(RELATIVE_RESULT_COORDINATES)
         self.result.text = f'YOU SCORE: {score[0]}'
+        self.share = Button(pygame.image.load('resources/img/buttons/share_button.png'), RELATIVE_SHARE_BUTTON_COORDINATES, RELATIVE_RETURN_BUTTON_SIZE,
+                            (DEFAULT_WIDTH, DEFAULT_HEIGHT))
 
     def update(self, new_window_size: tuple[int, int]):
         self.background.update(new_window_size)
         self.you_lost.update(new_window_size)
         self.return_button.update(new_window_size)
+        self.share.update(new_window_size)
