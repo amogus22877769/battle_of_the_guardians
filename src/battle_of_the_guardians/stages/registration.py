@@ -18,7 +18,6 @@ class Registration:
         self.password_input = Input(self.sprites.password_box, self.sprites.password)
         self.username_input_is_active: bool = True
         self.is_this_the_first_iteration: bool = True
-        self.try_again: bool = False
 
     def handle_updates(self, actions: list[Action]) -> stage:
         if self.sprites.enter:
@@ -48,9 +47,10 @@ class Registration:
                             with open('auth_data.txt', 'w') as f:
                                 f.write(f'{self.sprites.username.text}\n{self.sprites.password.text}')
                             f.close()
+                        self.is_this_the_first_iteration = True
                         return 'menu'
                     else:
-                        self.try_again = True
+                        self.sprites.try_again.text = 'TRY AGAIN'
                         return 'registration'
         return "registration"
 
@@ -63,7 +63,7 @@ class Registration:
                                     (self.sprites.registration_string.image, self.sprites.registration_string.rect),
                                     (self.sprites.username_string.image, self.sprites.username_string.rect),
                                     (self.sprites.password_string.image, self.sprites.password_string.rect),
-                                    (self.sprites.try_again.image if self.try_again else pygame.Surface((0, 0)), self.sprites.try_again.rect)))
+                                    (self.sprites.try_again.image, self.sprites.try_again.rect)))
 
     def update(self, actions: list[Action]) -> stage:
         if self.is_this_the_first_iteration:

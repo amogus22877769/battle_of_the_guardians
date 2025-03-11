@@ -19,7 +19,8 @@ class YouLost:
                         return "menu"
                     if self.sprites.share.collide_point(*action.value):
                         res = set_score()['result']
-                        if res != 'success'
+                        self.sprites.share_result.text = 'TRY AGAIN' if res != 'success' else 'SENT SUCCESSFULLY'
+
                 case "resize":
                     self.sprites.update(action.value)
         return "you_lost"
@@ -29,10 +30,11 @@ class YouLost:
                                     (self.sprites.return_button.image, self.sprites.return_button.rect),
                                     (self.sprites.you_lost.image, self.sprites.you_lost.rect),
                                     (self.sprites.result.image, self.sprites.result.rect),
-                                    (self.sprites.share.image, self.sprites.share.rect)))
+                                    (self.sprites.share.image, self.sprites.share.rect),
+                                    (self.sprites.share_result.image, self.sprites.share_result.rect)))
 
     def update(self, actions: list[Action]) -> stage:
         if self.is_this_the_first_iteration:
-            self.sprites.result.text = self.sprites.result.text[:12] + score[0]
+            self.sprites.result.text = self.sprites.result.text[:12] + f'{score[0]}'
             self.is_this_the_first_iteration = False
         return self.handle_updates(actions)

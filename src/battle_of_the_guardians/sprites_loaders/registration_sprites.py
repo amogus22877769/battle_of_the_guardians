@@ -40,7 +40,7 @@ class RegistrationSprites:
             self.enter = True
         self.try_again = self.registration_string.copy()
         self.try_again.place(TRY_AGAIN_RELATIVE_COORDINATES)
-        self.try_again.text = 'TRY AGAIN'
+        self.try_again.text = ''
 
     def update(self, new_window_size: tuple[int, int]):
         self.background.update(new_window_size)

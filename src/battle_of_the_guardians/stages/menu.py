@@ -17,15 +17,16 @@ class Menu:
                 case "click":
                     if self.sprites.battle_button.collide_point(*action.value):
                         return "draft"
+                    if self.sprites.leaderboard_button.collide_point(*action.value):
+                        return "leaderboard"
                 case "resize":
                     self.sprites.update(*action.value)
         return "menu"
 
     def draw(self, screen) -> None:
         screen.blits(blit_sequence=((self.sprites.menu.image, self.sprites.menu.rect),
-                                    (self.sprites.battle_button.image, self.sprites.battle_button.rect)))
+                                    (self.sprites.battle_button.image, self.sprites.battle_button.rect),
+                                    (self.sprites.leaderboard_button.image, self.sprites.leaderboard_button.rect)))
 
     def update(self, actions: list[Action]) -> stage:
-        if self.is_this_the_first_iteration:
-            pygame.key.start_text_input()
         return self.handle_updates(actions)
