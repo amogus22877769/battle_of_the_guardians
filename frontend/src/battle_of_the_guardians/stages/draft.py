@@ -1,6 +1,6 @@
 from frontend.src.battle_of_the_guardians.action import Action
 from frontend.src.battle_of_the_guardians.controllers.draft_controller import DraftController
-from frontend.src.battle_of_the_guardians.defines import stage
+from frontend.src.battle_of_the_guardians.interfaces import stage
 from frontend.src.battle_of_the_guardians.sprites_loaders.draft_sprites import DraftSprites
 
 

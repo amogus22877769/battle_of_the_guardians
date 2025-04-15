@@ -1,5 +1,5 @@
 from frontend.src.battle_of_the_guardians.action import Action
-from frontend.src.battle_of_the_guardians.defines import stage
+from frontend.src.battle_of_the_guardians.interfaces import stage
 from frontend.src.battle_of_the_guardians.sprites_loaders.menu_sprites import MenuSprites
 
 

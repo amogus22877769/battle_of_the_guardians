@@ -1,7 +1,7 @@
 from frontend.src.battle_of_the_guardians.action import Action
 from frontend.src.battle_of_the_guardians.buffer import score
 from frontend.src.battle_of_the_guardians.controllers.front import set_score
-from frontend.src.battle_of_the_guardians.defines import stage
+from frontend.src.battle_of_the_guardians.interfaces import stage
 from frontend.src.battle_of_the_guardians.sprites_loaders.you_lost_sprites import YouLostSprites
 
 

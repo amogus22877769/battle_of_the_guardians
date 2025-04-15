@@ -6,7 +6,7 @@ from frontend.src.battle_of_the_guardians import animations
 from frontend.src.battle_of_the_guardians.action import Action
 from frontend.src.battle_of_the_guardians.buffer import CURRENT_WINDOW_SIZE
 from frontend.src.battle_of_the_guardians.config import DEFAULT_WIDTH, DEFAULT_HEIGHT, NAME_OF_THE_GAME, FRAME_RATE
-from frontend.src.battle_of_the_guardians.defines import stage
+from frontend.src.battle_of_the_guardians.interfaces import stage
 from frontend.src.battle_of_the_guardians.stages.battle import Battle
 from frontend.src.battle_of_the_guardians.stages.draft import Draft
 from frontend.src.battle_of_the_guardians.stages.leaderboard import Leaderboard
